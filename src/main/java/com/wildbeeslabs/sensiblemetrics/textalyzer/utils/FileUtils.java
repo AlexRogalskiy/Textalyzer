@@ -80,7 +80,7 @@ public class FileUtils {
         Objects.requireNonNull(outputFile);
         Objects.requireNonNull(output);
         try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(outputFile.toPath(), FileUtils.DEFAULT_FILE_CHARACTER_ENCODING))) {
-            output.stream().map(String::valueOf).forEach(writer::println);
+            output.stream().map(term -> term.toFormatString()).forEach(writer::println);
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             LOGGER.error(String.format("ERROR: cannot create output file=%s, message=%s", String.valueOf(outputFile), ex.getMessage()));
         } catch (IOException ex) {

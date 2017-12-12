@@ -54,6 +54,10 @@ public final class LexicalUtils {
      * Default logger instance
      */
     private static final Logger LOGGER = LogManager.getLogger(LexicalUtils.class);
+    /**
+     * Default token delimiter
+     */
+    public static final String DEFAULT_DELIMITER = "\\s+";
 
     private LexicalUtils() {
         // PRIVATE EMPTY CONSTRUCTOR
@@ -65,7 +69,7 @@ public final class LexicalUtils {
 
     public static <T extends LexicalToken> Map<Integer, List<T>> getTokenMapByWordLength(final Stream<String> stream) {
         final Map<Integer, List<T>> wordsMap = stream
-                .flatMap(line -> Arrays.stream(line.trim().split("\\s+")))
+                .flatMap(line -> Arrays.stream(line.trim().split(LexicalUtils.DEFAULT_DELIMITER)))
                 .map(word -> word.replaceAll(LexicalToken.DEFAULT_TOKEN_FILTER_PATTERN, StringUtils.EMPTY).toLowerCase().trim())
                 .filter(StringUtils::isNotBlank)
                 .collect(Collectors.groupingBy(String::length, Collectors.mapping(word -> (T) new LexicalToken(word), Collectors.toList())));

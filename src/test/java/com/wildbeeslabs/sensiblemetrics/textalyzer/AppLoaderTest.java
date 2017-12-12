@@ -52,7 +52,7 @@ public class AppLoaderTest {
     public void testMain() {
         final String firstArg = "src/main/resources/INPUT.txt";
         final String secondArg = "src/main/resources/OUTPUT.txt";
-        final String[] args = new String[]{firstArg, secondArg};
+        final String[] args = new String[]{"-in", firstArg, "-out", secondArg};
         AppLoader.main(args);
     }
 

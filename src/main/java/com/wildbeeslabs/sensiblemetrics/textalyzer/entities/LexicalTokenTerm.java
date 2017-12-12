@@ -38,6 +38,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Entity class to store information on lexical tokens
@@ -50,6 +51,7 @@ import lombok.Setter;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
+@ToString
 public class LexicalTokenTerm<T extends LexicalToken> implements ILexicalTokenTerm<T> {
 
     @Setter(AccessLevel.NONE)
@@ -124,8 +126,7 @@ public class LexicalTokenTerm<T extends LexicalToken> implements ILexicalTokenTe
         return symbolSet;
     }
 
-    @Override
-    public String toString() {
+    public String toFormatString() {
         StringBuilder sBuffer = new StringBuilder();
         sBuffer.append("(");
         sBuffer.append("{");

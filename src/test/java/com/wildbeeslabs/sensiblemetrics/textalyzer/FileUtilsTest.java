@@ -77,8 +77,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    @SuppressWarnings("AssertEqualsBetweenInconvertibleTypes")
-    public void testWriteFile() {
+    public void testWriteFileSortedDesc() {
         String inputString = "asffsa sadfas fsad asdffsda ";
         Map<Integer, List<LexicalToken>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
         Assert.assertEquals("Checking the size of token list: ", 3, map.size());
@@ -95,6 +94,29 @@ public class FileUtilsTest {
             final Optional<String> firstLine = stream.findFirst();
             Assert.assertTrue(firstLine.isPresent());
             Assert.assertEquals("Checking the first line of output token list: ", "({a}, 4) -> 1", firstLine.get());
+        } catch (IOException ex) {
+            LOGGER.error(String.format("ERROR: cannot read from input file=%s, message=%s", String.valueOf(outputFile), ex.getMessage()));
+        }
+    }
+
+    @Test
+    public void testWriteFileSortedAsc() {
+        String inputString = "asffsa sadfas fsad asdffsda ";
+        Map<Integer, List<LexicalToken>> map = LexicalUtils.getSortedTokenMapByWordLength(Stream.of(inputString));
+        Assert.assertEquals("Checking the size of token list: ", 3, map.size());
+
+        String outputFile = "src/main/resources/OUTPUT.txt";
+        List<LexicalTokenTerm<LexicalToken>> list = LexicalUtils.getLexicalTokenTermList(map);
+        Assert.assertEquals("Checking the size of output token list: ", 3, map.size());
+        FileUtils.writeFile(new File(outputFile), list);
+
+        list = FileUtils.readFile(new File(outputFile));
+        Assert.assertEquals("Checking the size of output token list: ", 1, list.size());
+
+        try (final Stream<String> stream = Files.lines(Paths.get(outputFile), FileUtils.DEFAULT_FILE_CHARACTER_ENCODING)) {
+            final Optional<String> firstLine = stream.findFirst();
+            Assert.assertTrue(firstLine.isPresent());
+            Assert.assertEquals("Checking the first line of output token list: ", "({a}, 8) -> 2", firstLine.get());
         } catch (IOException ex) {
             LOGGER.error(String.format("ERROR: cannot read from input file=%s, message=%s", String.valueOf(outputFile), ex.getMessage()));
         }
