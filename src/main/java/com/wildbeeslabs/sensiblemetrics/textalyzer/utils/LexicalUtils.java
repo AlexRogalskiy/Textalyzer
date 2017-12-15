@@ -89,7 +89,7 @@ public final class LexicalUtils {
     }
 
     public static <T extends ILexicalToken, E extends ILexicalTokenTerm<T>> List<E> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap) {
-        final List<E> tokenTermList = new ArrayList<>();
+        final List<E> tokenTermList = new ArrayList<>(tokenMap.size());
         for (final Map.Entry<Integer, List<T>> tokenEntry : tokenMap.entrySet()) {
             final E tokenTerm = (E) new LexicalTokenTerm<>();
             tokenTerm.setTokens(tokenEntry.getValue());
