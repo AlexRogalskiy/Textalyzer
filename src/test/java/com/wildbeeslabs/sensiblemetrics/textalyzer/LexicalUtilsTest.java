@@ -60,7 +60,7 @@ public class LexicalUtilsTest {
     @Test
     public void testGetTokenMapByWordLength() {
         String inputString = "Base test simple string";
-        Map<Integer, List<ILexicalToken>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<ILexicalToken<String>>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
         Assert.assertEquals(2, map.size());
 
         inputString = "Base test";
@@ -75,17 +75,17 @@ public class LexicalUtilsTest {
     @Test
     public void testGetSortedTokenMapByWordLength() {
         String inputString = "Base test simple string a new one";
-        Map<Integer, List<ILexicalToken>> list = LexicalUtils.getSortedTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<ILexicalToken<String>>> list = LexicalUtils.getSortedTokenMapByWordLength(Stream.of(inputString));
         Assert.assertEquals(4, list.size());
     }
 
     @Test
     public void testGetLexicalTokenTermList() {
         String inputString = "sfd saf sdf f asdfs dsf sdf sdf ass";
-        Map<Integer, List<ILexicalToken>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<ILexicalToken<String>>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
         Assert.assertEquals(3, map.size());
 
-        List<ILexicalTokenTerm<ILexicalToken>> list = LexicalUtils.getLexicalTokenTermList(map);
+        List<ILexicalTokenTerm<String, ILexicalToken<String>>> list = LexicalUtils.getLexicalTokenTermList(map);
         Assert.assertEquals(3, list.size());
     }
 

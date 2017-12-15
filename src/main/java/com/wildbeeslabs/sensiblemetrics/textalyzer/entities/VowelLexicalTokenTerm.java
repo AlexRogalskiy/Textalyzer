@@ -47,7 +47,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexicalToken<E>> extends BaseLexicalTokenTerm<T> {
+public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexicalToken<E>> extends BaseLexicalTokenTerm<E, T> {
 
     private int tokenLength;
 

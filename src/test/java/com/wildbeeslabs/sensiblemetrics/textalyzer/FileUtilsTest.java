@@ -66,7 +66,7 @@ public class FileUtilsTest {
     @Test
     public void testReadFile() {
         String inputFile = "src/main/resources/INPUT.txt";
-        List<? extends ILexicalTokenTerm<ILexicalToken>> list = FileUtils.readFile(new File(inputFile));
+        List<ILexicalTokenTerm<String, ILexicalToken<String>>> list = FileUtils.readFile(new File(inputFile));
         Assert.assertEquals("Checking the size of token list: ", 3, list.size());
 
         inputFile = "src/main/resources/INPUT2.txt";
@@ -81,11 +81,11 @@ public class FileUtilsTest {
     @Test
     public void testWriteFileSortedDesc() {
         String inputString = "asffsa sadfas fsad asdffsda ";
-        Map<Integer, List<ILexicalToken>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<ILexicalToken<String>>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
         Assert.assertEquals("Checking the size of token list: ", 3, map.size());
 
         String outputFile = "src/main/e/OUTPUT.txt";
-        List<ILexicalTokenTerm<ILexicalToken>> list = LexicalUtils.getLexicalTokenTermList(map);
+        List<ILexicalTokenTerm<String, ILexicalToken<String>>> list = LexicalUtils.getLexicalTokenTermList(map);
         Assert.assertEquals("Checking the size of output token list: ", 3, list.size());
         FileUtils.writeFile(new File(outputFile), list);
 
@@ -101,11 +101,11 @@ public class FileUtilsTest {
     @Test
     public void testWriteFileSortedAsc() {
         String inputString = "asffsa sadfas fsad asdffsda ";
-        Map<Integer, List<ILexicalToken>> map = LexicalUtils.getSortedTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<ILexicalToken<String>>> map = LexicalUtils.getSortedTokenMapByWordLength(Stream.of(inputString));
         Assert.assertEquals("Checking the size of token list: ", 3, map.size());
 
         String outputFile = "src/main/resources/OUTPUT.txt";
-        List<ILexicalTokenTerm<ILexicalToken>> list = LexicalUtils.getLexicalTokenTermList(map);
+        List<ILexicalTokenTerm<String, ILexicalToken<String>>> list = LexicalUtils.getLexicalTokenTermList(map);
         Assert.assertEquals("Checking the size of output token list: ", 3, list.size());
         FileUtils.writeFile(new File(outputFile), list);
 

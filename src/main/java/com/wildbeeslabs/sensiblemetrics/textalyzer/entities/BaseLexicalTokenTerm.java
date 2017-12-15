@@ -45,13 +45,14 @@ import org.apache.commons.lang3.StringUtils;
  * @author alexander.rogalskiy
  * @version 1.0
  * @since 2017-12-12
+ * @param <E>
  * @param <T>
  *
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public abstract class BaseLexicalTokenTerm<T extends ILexicalToken> implements ILexicalTokenTerm<T> {
+public abstract class BaseLexicalTokenTerm<E extends CharSequence, T extends ILexicalToken<E>> implements ILexicalTokenTerm<E, T> {
 
     @Setter(AccessLevel.NONE)
     protected final List<T> tokenList;
