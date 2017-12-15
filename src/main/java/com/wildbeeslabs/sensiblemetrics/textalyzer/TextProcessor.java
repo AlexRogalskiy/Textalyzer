@@ -51,7 +51,7 @@ public class TextProcessor {
     public void init(final String[] args) {
         LOGGER.info("Initialization command line processor...");
         final CmdLineProcessor cmdProcessor = new CmdLineProcessor(args);
-        List<? extends ILexicalTokenTerm<ILexicalToken>> tokenTermList = null;
+        List<? extends ILexicalTokenTerm<String, ILexicalToken<String>>> tokenTermList = null;
         if (Objects.nonNull(cmdProcessor.getInputSource())) {
             tokenTermList = FileUtils.readFile(cmdProcessor.getInputSource());
         }

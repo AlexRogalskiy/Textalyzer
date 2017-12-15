@@ -25,7 +25,6 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Set;
 
 /**
  *
@@ -34,21 +33,18 @@ import java.util.Set;
  * @author Alex
  * @version 1.0.0
  * @since 2017-12-12
+ * @param <E>
  * @param <T>
  */
-public interface ILexicalTokenTerm<T extends ILexicalToken> extends Serializable {
+public interface ILexicalTokenTerm<E extends CharSequence, T extends ILexicalToken<E>> extends Serializable {
 
     void addToken(final T token);
 
-    double getSymbolAvgCounter();
-
-    Set<Character> getUniqueSymbols();
+    void removeToken(final T token);
 
     void setTokens(final Collection<? extends T> tokenCollection);
 
     void setTokenLength(int length);
 
     String toFormatString();
-
-    int getSymbolCounter();
 }

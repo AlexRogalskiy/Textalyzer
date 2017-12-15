@@ -65,7 +65,7 @@ public class FileUtils {
         // PRIVATE EMPTY CONSTRUCTOR
     }
 
-    public static <T extends ILexicalToken, E extends ILexicalTokenTerm<T>> List<E> readFile(final File inputFile) {
+    public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> List<E> readFile(final File inputFile) {
         Objects.requireNonNull(inputFile);
         try (final Stream<String> stream = Files.lines(inputFile.toPath(), FileUtils.DEFAULT_FILE_CHARACTER_ENCODING)) {
             final Map<Integer, List<T>> wordsMap = LexicalUtils.getSortedTokenMapByWordLength(stream);
@@ -76,7 +76,7 @@ public class FileUtils {
         return null;
     }
 
-    public static <T extends ILexicalToken, E extends ILexicalTokenTerm<T>> void writeFile(final File outputFile, final List<? extends E> output) {
+    public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> void writeFile(final File outputFile, final List<? extends E> output) {
         Objects.requireNonNull(outputFile);
         Objects.requireNonNull(output);
         try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(outputFile.toPath(), FileUtils.DEFAULT_FILE_CHARACTER_ENCODING))) {

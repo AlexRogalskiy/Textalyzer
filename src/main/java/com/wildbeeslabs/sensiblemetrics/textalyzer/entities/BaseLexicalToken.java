@@ -24,58 +24,36 @@
 package com.wildbeeslabs.sensiblemetrics.textalyzer.entities;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
-
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
- * Entity class to store information on lexical token
+ * Base abstract lexical token class to store information on lexical token
  *
  * @author alexander.rogalskiy
  * @version 1.0
  * @since 2017-12-12
+ * @param <T>
  *
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@NoArgsConstructor
 @ToString
-public class LexicalToken implements ILexicalToken {
+public abstract class BaseLexicalToken<T extends CharSequence> implements ILexicalToken<T> {
 
     /**
      * Default lexical sort order comparator
      */
-    public static final LexicalToken.LexicalComparator<String> DEFAULT_TOKEN_SORT_COMPARATOR = new LexicalToken.LexicalComparator<>();
-    /**
-     * Default vowels pattern
-     */
-    public static final String DEFAULT_TOKEN_VOWELS_PATTERN = "[^aeiouyAEIOUY]";
-    /**
-     * Default token filter pattern
-     */
-    public static final String DEFAULT_TOKEN_FILTER_PATTERN = "[^a-zA-Z]";
+    public static final BaseLexicalToken.LexicalComparator<String> DEFAULT_TOKEN_SORT_COMPARATOR = new BaseLexicalToken.LexicalComparator<>();
 
-    private Comparator<? super String> comparator;
-    private String value;
-
-    public LexicalToken(final String value) {
-        this(value, DEFAULT_TOKEN_SORT_COMPARATOR);
-    }
-
-    public LexicalToken(final String value, final Comparator<? super String> comparator) {
-        this.value = value;
-        this.comparator = comparator;
-    }
+    protected Comparator<? super String> comparator;
+    protected T value;
 
     protected static class LexicalComparator<T extends Comparable<? super T>> implements Comparator<T> {
 
@@ -85,40 +63,24 @@ public class LexicalToken implements ILexicalToken {
         }
     }
 
+    public BaseLexicalToken(final T value, final Comparator<? super String> comparator) {
+        this.value = value;
+        this.comparator = comparator;
+    }
+
+    @Override
+    public int getLength() {
+        if (Objects.isNull(this.value)) {
+            return 0;
+        }
+        return this.value.length();
+    }
+
     @Override
     public Set<Integer> getCharacterSet() {
         return Stream.of(this.value)
                 .flatMapToInt(CharSequence::chars)
                 .mapToObj(c -> Integer.valueOf(c))
                 .collect(Collectors.toSet());
-    }
-
-    public Set<Character> getVowelCharacterSet() {
-        return Stream.of(this.getVowelsAsString())
-                .flatMapToInt(CharSequence::chars)
-                .distinct()
-                .mapToObj(c -> Character.valueOf((char) c))
-                .collect(Collectors.toSet());
-    }
-
-    public int getVowelCount() {
-        return this.getVowelsAsString().length();
-    }
-
-    @Override
-    public int getLength() {
-        return this.value.length();
-    }
-
-    public String getDistinctVowelString() {
-        return Stream.of(this.getVowelsAsString()
-                .split(StringUtils.EMPTY))
-                .distinct()
-                .sorted(LexicalToken.DEFAULT_TOKEN_SORT_COMPARATOR)
-                .collect(Collectors.joining(StringUtils.EMPTY));
-    }
-
-    private String getVowelsAsString() {
-        return this.value.replaceAll(DEFAULT_TOKEN_VOWELS_PATTERN, StringUtils.EMPTY);
     }
 }

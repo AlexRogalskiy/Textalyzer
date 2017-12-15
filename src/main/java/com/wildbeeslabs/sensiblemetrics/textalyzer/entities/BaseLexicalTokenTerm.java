@@ -25,15 +25,11 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer.entities;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -41,8 +37,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import lombok.ToString;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
- * Entity class to store information on lexical tokens
+ * Base abstract lexical token term class to store information on lexical tokens
  *
  * @author alexander.rogalskiy
  * @version 1.0
@@ -53,25 +51,13 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class LexicalTokenTerm<T extends ILexicalToken> implements ILexicalTokenTerm<T> {
+public abstract class BaseLexicalTokenTerm<T extends ILexicalToken> implements ILexicalTokenTerm<T> {
 
     @Setter(AccessLevel.NONE)
-    private final List<T> tokenList;
+    protected final List<T> tokenList;
 
-    @Setter(AccessLevel.NONE)
-    private Set<Character> uniqueSymbolSet;
-
-    @Setter(AccessLevel.NONE)
-    private int symbolCounter;
-
-    private int tokenLength;
-
-    @Setter(AccessLevel.NONE)
-    private double symbolAvgCounter;
-
-    public LexicalTokenTerm() {
+    public BaseLexicalTokenTerm() {
         this.tokenList = new ArrayList<>();
-        this.symbolCounter = 0;
     }
 
     @Override
@@ -90,57 +76,14 @@ public class LexicalTokenTerm<T extends ILexicalToken> implements ILexicalTokenT
     }
 
     @Override
-    public double getSymbolAvgCounter() {
-        this.symbolAvgCounter = calculateAvgSymbolDistribution();
-        return this.symbolAvgCounter;
-    }
-
-    private double calculateAvgSymbolDistribution() {
-        double result = 0.0;
-        if (!this.getTokenList().isEmpty()) {
-            result = (double) this.getSymbolCounter() / this.getTokenList().size();
+    public void removeToken(final T token) {
+        if (Objects.nonNull(token)) {
+            this.tokenList.remove(token);
         }
-        return result;
     }
 
     @Override
-    public int getSymbolCounter() {
-        this.symbolCounter = calculateSymbolCounter();
-        return this.symbolCounter;
-    }
-
-    private int calculateSymbolCounter() {
-        return this.tokenList.stream().map((token) -> {
-            return token.getVowelCount();
-        }).reduce(0, (a, b) -> a + b);
-    }
-
-    @Override
-    public Set<Character> getUniqueSymbols() {
-        this.uniqueSymbolSet = createUniqueSymbolSet();
-        return this.uniqueSymbolSet;
-    }
-
-    private Set<Character> createUniqueSymbolSet() {
-        final Set<Character> symbolSet = new HashSet<>();
-        this.tokenList.stream().forEach((token) -> {
-            symbolSet.addAll(token.getVowelCharacterSet());
-        });
-        return symbolSet;
-    }
-
     public String toFormatString() {
-        StringBuilder sBuffer = new StringBuilder();
-        sBuffer.append("(");
-        sBuffer.append("{");
-        for (final Iterator<Character> it = this.getUniqueSymbols().iterator(); it.hasNext();) {
-            sBuffer.append(it.next());
-            if (it.hasNext()) {
-                sBuffer.append(", ");
-            }
-        }
-        sBuffer.append("}").append(", ").append(this.tokenLength).append(")");
-        sBuffer.append(" -> ").append(NumberUtils.format(this.getSymbolAvgCounter()));
-        return sBuffer.toString();
+        return StringUtils.join(this.tokenList, ", ");
     }
 }

@@ -23,22 +23,20 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces;
 
-import java.io.Serializable;
 import java.util.Set;
 
 /**
  *
- * Lexical token interface declaration
+ * Vowel lexical token interface declaration
  *
  * @author Alex
  * @version 1.0.0
  * @since 2017-12-12
  * @param <T>
  */
-public interface ILexicalToken<T extends CharSequence> extends Serializable {
+public interface IVowelLexicalToken<T extends CharSequence> extends ILexicalToken<T> {
 
-    Set<Integer> getCharacterSet();
+    int getVowelCount();
 
-    int getLength();
-
+    Set<Character> getVowelCharacterSet();
 }

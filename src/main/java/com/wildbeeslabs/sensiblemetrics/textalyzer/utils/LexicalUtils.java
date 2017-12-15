@@ -23,10 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer.utils;
 
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.LexicalToken;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.LexicalTokenTerm;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.VowelLexicalToken;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.VowelLexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,34 +65,34 @@ public final class LexicalUtils {
         // PRIVATE EMPTY CONSTRUCTOR
     }
 
-    public static <T extends ILexicalToken> Map<T, Integer> getCountMapByTokenVowelsString(final List<T> tokenList) {
+    public static <E extends CharSequence, T extends IVowelLexicalToken<E>> Map<T, Integer> getCountMapByTokenVowelsString(final List<T> tokenList) {
         return tokenList.parallelStream().collect(Collectors.toMap(word -> word, word -> word.getVowelCount(), Integer::sum));
     }
 
-    public static <T extends ILexicalToken> Map<Integer, List<T>> getTokenMapByWordLength(final Stream<String> stream) {
+    public static <E extends CharSequence, T extends ILexicalToken<E>> Map<Integer, List<T>> getTokenMapByWordLength(final Stream<String> stream) {
         final Map<Integer, List<T>> wordsMap = stream
                 .flatMap(line -> Arrays.stream(line.trim().split(LexicalUtils.DEFAULT_TOKEN_DELIMITER)))
-                .map(word -> word.replaceAll(LexicalToken.DEFAULT_TOKEN_FILTER_PATTERN, StringUtils.EMPTY).toLowerCase().trim())
+                .map(word -> word.replaceAll(VowelLexicalToken.DEFAULT_TOKEN_FILTER_PATTERN, StringUtils.EMPTY).toLowerCase().trim())
                 .filter(StringUtils::isNotBlank)
-                .collect(Collectors.groupingBy(String::length, Collectors.mapping(word -> (T) new LexicalToken(word), Collectors.toList())));
+                .collect(Collectors.groupingBy(String::length, Collectors.mapping(word -> (T) new VowelLexicalToken(word), Collectors.toList())));
         return wordsMap;
     }
 
-    public static <T extends ILexicalToken> Map<Integer, List<T>> getSortedTokenMapByWordLength(final Stream<String> stream) {
+    public static <E extends CharSequence, T extends ILexicalToken<E>> Map<Integer, List<T>> getSortedTokenMapByWordLength(final Stream<String> stream) {
         return getSortedTokenMapByKeyLength(stream, Comparator.reverseOrder());
     }
 
-    public static <T extends ILexicalToken> Map<Integer, List<T>> getSortedTokenMapByKeyLength(final Stream<String> stream, final Comparator<? super Integer> comparator) {
+    public static <E extends CharSequence, T extends ILexicalToken<E>> Map<Integer, List<T>> getSortedTokenMapByKeyLength(final Stream<String> stream, final Comparator<? super Integer> comparator) {
         final Map<Integer, List<T>> wordsMap = getTokenMapByWordLength(stream);
         return wordsMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(comparator))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
-    public static <T extends ILexicalToken, E extends ILexicalTokenTerm<T>> List<E> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap) {
+    public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> List<E> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap) {
         final List<E> tokenTermList = new ArrayList<>(tokenMap.size());
         for (final Map.Entry<Integer, List<T>> tokenEntry : tokenMap.entrySet()) {
-            final E tokenTerm = (E) new LexicalTokenTerm<>();
+            final E tokenTerm = (E) new VowelLexicalTokenTerm<>();
             tokenTerm.setTokens(tokenEntry.getValue());
             tokenTerm.setTokenLength(tokenEntry.getKey());
             tokenTermList.add(tokenTerm);
