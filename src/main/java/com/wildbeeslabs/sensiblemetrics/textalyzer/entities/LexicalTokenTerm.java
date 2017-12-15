@@ -23,9 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer.entities;
 
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
-
 import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.NumberUtils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -52,7 +53,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class LexicalTokenTerm<T extends LexicalToken> implements ILexicalTokenTerm<T> {
+public class LexicalTokenTerm<T extends ILexicalToken> implements ILexicalTokenTerm<T> {
 
     @Setter(AccessLevel.NONE)
     private final List<T> tokenList;

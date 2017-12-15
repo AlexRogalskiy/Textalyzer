@@ -42,4 +42,6 @@ public interface ILexicalToken extends Serializable {
 
     int getVowelCount();
 
+    Set<Character> getVowelCharacterSet();
+
 }

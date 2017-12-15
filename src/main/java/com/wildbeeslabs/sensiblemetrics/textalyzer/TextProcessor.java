@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer;
 
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.LexicalToken;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.LexicalTokenTerm;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.FileUtils;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public class TextProcessor {
     public void init(final String[] args) {
         LOGGER.info("Initialization command line processor...");
         final CmdLineProcessor cmdProcessor = new CmdLineProcessor(args);
-        List<LexicalTokenTerm<LexicalToken>> tokenTermList = null;
+        List<? extends ILexicalTokenTerm<ILexicalToken>> tokenTermList = null;
         if (Objects.nonNull(cmdProcessor.getInputSource())) {
             tokenTermList = FileUtils.readFile(cmdProcessor.getInputSource());
         }

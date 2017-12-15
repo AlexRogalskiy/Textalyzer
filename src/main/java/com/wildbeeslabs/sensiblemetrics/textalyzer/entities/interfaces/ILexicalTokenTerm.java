@@ -23,7 +23,6 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces;
 
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.LexicalToken;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
@@ -37,7 +36,7 @@ import java.util.Set;
  * @since 2017-12-12
  * @param <T>
  */
-public interface ILexicalTokenTerm<T extends LexicalToken> extends Serializable {
+public interface ILexicalTokenTerm<T extends ILexicalToken> extends Serializable {
 
     void addToken(final T token);
 
@@ -46,4 +45,12 @@ public interface ILexicalTokenTerm<T extends LexicalToken> extends Serializable 
     Set<Character> getUniqueSymbols();
 
     void setTokens(final Collection<? extends T> tokenCollection);
+
+    void incrementSymbolCounter(int count);
+
+    void decrementSymbolCounter(int count);
+
+    void setTokenLength(int length);
+
+    String toFormatString();
 }

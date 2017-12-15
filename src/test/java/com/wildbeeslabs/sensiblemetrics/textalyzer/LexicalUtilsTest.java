@@ -23,12 +23,14 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer;
 
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.LexicalToken;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.LexicalTokenTerm;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.LexicalUtils;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -58,7 +60,7 @@ public class LexicalUtilsTest {
     @Test
     public void testGetTokenMapByWordLength() {
         String inputString = "Base test simple string";
-        Map<Integer, List<LexicalToken>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<ILexicalToken>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
         Assert.assertEquals(2, map.size());
 
         inputString = "Base test";
@@ -73,17 +75,17 @@ public class LexicalUtilsTest {
     @Test
     public void testGetSortedTokenMapByWordLength() {
         String inputString = "Base test simple string a new one";
-        Map<Integer, List<LexicalToken>> list = LexicalUtils.getSortedTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<ILexicalToken>> list = LexicalUtils.getSortedTokenMapByWordLength(Stream.of(inputString));
         Assert.assertEquals(4, list.size());
     }
 
     @Test
     public void testGetLexicalTokenTermList() {
         String inputString = "sfd saf sdf f asdfs dsf sdf sdf ass";
-        Map<Integer, List<LexicalToken>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<ILexicalToken>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
         Assert.assertEquals(3, map.size());
 
-        List<LexicalTokenTerm<LexicalToken>> list = LexicalUtils.getLexicalTokenTermList(map);
+        List<ILexicalTokenTerm<ILexicalToken>> list = LexicalUtils.getLexicalTokenTermList(map);
         Assert.assertEquals(3, list.size());
     }
 

@@ -26,6 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer.utils;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.LexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.LexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +58,7 @@ public final class LexicalUtils {
     /**
      * Default token delimiter
      */
-    public static final String DEFAULT_DELIMITER = "\\s+";
+    public static final String DEFAULT_TOKEN_DELIMITER = "\\s+";
 
     private LexicalUtils() {
         // PRIVATE EMPTY CONSTRUCTOR
@@ -67,27 +68,27 @@ public final class LexicalUtils {
         return tokenList.parallelStream().collect(Collectors.toMap(word -> word, word -> word.getVowelCount(), Integer::sum));
     }
 
-    public static <T extends LexicalToken> Map<Integer, List<T>> getTokenMapByWordLength(final Stream<String> stream) {
+    public static <T extends ILexicalToken> Map<Integer, List<T>> getTokenMapByWordLength(final Stream<String> stream) {
         final Map<Integer, List<T>> wordsMap = stream
-                .flatMap(line -> Arrays.stream(line.trim().split(LexicalUtils.DEFAULT_DELIMITER)))
+                .flatMap(line -> Arrays.stream(line.trim().split(LexicalUtils.DEFAULT_TOKEN_DELIMITER)))
                 .map(word -> word.replaceAll(LexicalToken.DEFAULT_TOKEN_FILTER_PATTERN, StringUtils.EMPTY).toLowerCase().trim())
                 .filter(StringUtils::isNotBlank)
                 .collect(Collectors.groupingBy(String::length, Collectors.mapping(word -> (T) new LexicalToken(word), Collectors.toList())));
         return wordsMap;
     }
 
-    public static <T extends LexicalToken> Map<Integer, List<T>> getSortedTokenMapByWordLength(final Stream<String> stream) {
+    public static <T extends ILexicalToken> Map<Integer, List<T>> getSortedTokenMapByWordLength(final Stream<String> stream) {
         return getSortedTokenMapByKeyLength(stream, Comparator.reverseOrder());
     }
 
-    public static <T extends LexicalToken> Map<Integer, List<T>> getSortedTokenMapByKeyLength(final Stream<String> stream, final Comparator<? super Integer> comparator) {
+    public static <T extends ILexicalToken> Map<Integer, List<T>> getSortedTokenMapByKeyLength(final Stream<String> stream, final Comparator<? super Integer> comparator) {
         final Map<Integer, List<T>> wordsMap = getTokenMapByWordLength(stream);
         return wordsMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(comparator))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
-    public static <T extends LexicalToken, E extends LexicalTokenTerm<T>> List<E> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap) {
+    public static <T extends ILexicalToken, E extends ILexicalTokenTerm<T>> List<E> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap) {
         final List<E> tokenTermList = new ArrayList<>();
         for (final Map.Entry<Integer, List<T>> tokenEntry : tokenMap.entrySet()) {
             final E tokenTerm = (E) new LexicalTokenTerm<>();

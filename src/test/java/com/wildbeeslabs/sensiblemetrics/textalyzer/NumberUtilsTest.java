@@ -26,6 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.NumberUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
