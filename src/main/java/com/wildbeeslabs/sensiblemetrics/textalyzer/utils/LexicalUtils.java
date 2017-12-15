@@ -92,12 +92,7 @@ public final class LexicalUtils {
         final List<E> tokenTermList = new ArrayList<>();
         for (final Map.Entry<Integer, List<T>> tokenEntry : tokenMap.entrySet()) {
             final E tokenTerm = (E) new LexicalTokenTerm<>();
-            tokenEntry.getValue().stream().map((token) -> {
-                tokenTerm.incrementSymbolCounter(token.getVowelCount());
-                return token;
-            }).forEach((token) -> {
-                tokenTerm.addToken(token);
-            });
+            tokenTerm.setTokens(tokenEntry.getValue());
             tokenTerm.setTokenLength(tokenEntry.getKey());
             tokenTermList.add(tokenTerm);
         }

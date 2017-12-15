@@ -26,6 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer.entities;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -80,7 +81,7 @@ public class LexicalToken implements ILexicalToken {
 
         @Override
         public int compare(final T first, final T last) {
-            return first.compareTo(last);
+            return Objects.compare(first, last, this);
         }
     }
 
@@ -109,7 +110,7 @@ public class LexicalToken implements ILexicalToken {
         return this.value.length();
     }
 
-    public String getVowelString() {
+    public String getDistinctVowelString() {
         return Stream.of(this.getVowelsAsString()
                 .split(StringUtils.EMPTY))
                 .distinct()

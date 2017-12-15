@@ -46,11 +46,9 @@ public interface ILexicalTokenTerm<T extends ILexicalToken> extends Serializable
 
     void setTokens(final Collection<? extends T> tokenCollection);
 
-    void incrementSymbolCounter(int count);
-
-    void decrementSymbolCounter(int count);
-
     void setTokenLength(int length);
 
     String toFormatString();
+
+    int getSymbolCounter();
 }

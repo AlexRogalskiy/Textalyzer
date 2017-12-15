@@ -89,16 +89,6 @@ public class LexicalTokenTerm<T extends ILexicalToken> implements ILexicalTokenT
         }
     }
 
-    public void incrementSymbolCounter(int count) {
-        assert (count >= 0);
-        this.symbolCounter += count;
-    }
-
-    public void decrementSymbolCounter(int count) {
-        assert (count >= 0);
-        this.symbolCounter -= count;
-    }
-
     @Override
     public double getSymbolAvgCounter() {
         this.symbolAvgCounter = calculateAvgSymbolDistribution();
@@ -107,10 +97,22 @@ public class LexicalTokenTerm<T extends ILexicalToken> implements ILexicalTokenT
 
     private double calculateAvgSymbolDistribution() {
         double result = 0.0;
-        if (!this.tokenList.isEmpty()) {
-            result = (double) this.symbolCounter / this.tokenList.size();
+        if (!this.getTokenList().isEmpty()) {
+            result = (double) this.getSymbolCounter() / this.getTokenList().size();
         }
         return result;
+    }
+
+    @Override
+    public int getSymbolCounter() {
+        this.symbolCounter = calculateSymbolCounter();
+        return this.symbolCounter;
+    }
+
+    private int calculateSymbolCounter() {
+        return this.tokenList.stream().map((token) -> {
+            return token.getVowelCount();
+        }).reduce(0, (a, b) -> a + b);
     }
 
     @Override
