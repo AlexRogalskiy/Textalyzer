@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.textalyzer;
+package com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
@@ -94,6 +94,7 @@ public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
+    @Override
     public <U extends ILexicalTokenTerm<E, T>> List<U> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap) {
         final List<U> tokenTermList = new ArrayList<>(tokenMap.size());
         for (final Map.Entry<Integer, List<T>> tokenEntry : tokenMap.entrySet()) {

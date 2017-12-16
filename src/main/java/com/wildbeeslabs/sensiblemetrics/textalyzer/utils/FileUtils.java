@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer.utils;
 
-import com.wildbeeslabs.sensiblemetrics.textalyzer.ILexicalTokenAnalyzer;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.ILexicalTokenAnalyzer;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
 
