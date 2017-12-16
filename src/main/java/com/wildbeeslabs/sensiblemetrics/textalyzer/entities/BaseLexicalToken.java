@@ -48,7 +48,7 @@ import lombok.ToString;
 public abstract class BaseLexicalToken<T extends CharSequence> implements ILexicalToken<T> {
 
     /**
-     * Default lexical sort order comparator
+     * Default lexical token sort order comparator
      */
     public static final BaseLexicalToken.LexicalComparator<String> DEFAULT_TOKEN_SORT_COMPARATOR = new BaseLexicalToken.LexicalComparator<>();
 

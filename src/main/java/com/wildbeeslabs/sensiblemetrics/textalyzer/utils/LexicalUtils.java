@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer.utils;
 
+import com.wildbeeslabs.sensiblemetrics.textalyzer.VowelLexicalTokenAnalyzer;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.VowelLexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.VowelLexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
@@ -72,7 +73,7 @@ public final class LexicalUtils {
     public static <E extends CharSequence, T extends ILexicalToken<E>> Map<Integer, List<T>> getTokenMapByWordLength(final Stream<String> stream) {
         final Map<Integer, List<T>> wordsMap = stream
                 .flatMap(line -> Arrays.stream(line.trim().split(LexicalUtils.DEFAULT_TOKEN_DELIMITER)))
-                .map(word -> word.replaceAll(VowelLexicalToken.DEFAULT_TOKEN_FILTER_PATTERN, StringUtils.EMPTY).toLowerCase().trim())
+                .map(word -> word.replaceAll(VowelLexicalTokenAnalyzer.DEFAULT_TOKEN_FILTER_PATTERN, StringUtils.EMPTY).toLowerCase().trim())
                 .filter(StringUtils::isNotBlank)
                 .collect(Collectors.groupingBy(String::length, Collectors.mapping(word -> (T) new VowelLexicalToken(word), Collectors.toList())));
         return wordsMap;

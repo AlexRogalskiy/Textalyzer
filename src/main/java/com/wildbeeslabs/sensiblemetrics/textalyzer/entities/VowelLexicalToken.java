@@ -53,10 +53,6 @@ public class VowelLexicalToken<T extends CharSequence> extends BaseLexicalToken<
      * Default vowels pattern
      */
     public static final String DEFAULT_TOKEN_VOWELS_PATTERN = "[^aeiouyAEIOUY]";
-    /**
-     * Default token filter pattern
-     */
-    public static final String DEFAULT_TOKEN_FILTER_PATTERN = "[^a-zA-Z]";
 
     public VowelLexicalToken() {
         this(null);

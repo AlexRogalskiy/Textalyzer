@@ -34,7 +34,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
- * Class to process input text stream
+ * Text processor class to operate on input / output text stream
  *
  * @author alexander.rogalskiy
  * @version 1.0
@@ -49,7 +49,7 @@ public class TextProcessor {
     private static final Logger LOGGER = LogManager.getLogger(TextProcessor.class);
 
     public void init(final String[] args) {
-        LOGGER.info("Initialization command line processor...");
+        LOGGER.info("Initializing command line processor...");
         final CmdLineProcessor cmdProcessor = new CmdLineProcessor(args);
         List<ILexicalTokenTerm<String, ILexicalToken<String>>> tokenTermList = null;
         if (Objects.nonNull(cmdProcessor.getInputSource())) {
