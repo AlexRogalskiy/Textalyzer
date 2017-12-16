@@ -57,8 +57,9 @@ public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelL
     public VowelLexicalTokenAnalyzer() {
     }
 
+    @Override
     public List<T> getLexicalTokenList(final Stream<E> stream) {
-        return this.getLexicalTokenList(stream, this.getDefaultFilterFunction());
+        return this.getLexicalTokenList(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER);
     }
 
     public Function<CharSequence, CharSequence> getFilterFunction(final String filterPattern) {
@@ -69,20 +70,23 @@ public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelL
         return this.getFilterFunction(VowelLexicalTokenAnalyzer.DEFAULT_TOKEN_FILTER_PATTERN);
     }
 
+    @Override
     public Map<Integer, List<T>> getTokenMapByLength(final Stream<E> stream) {
-        return this.getTokenMapByLength(stream, this.getDefaultFilterFunction());
+        return this.getTokenMapByLength(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER);
     }
 
     public Map<T, Integer> getTokenVowelCountMapByVowelString(final List<T> tokenList) {
         return tokenList.parallelStream().collect(Collectors.toMap(token -> token, token -> token.getVowelCount(), Integer::sum));
     }
 
-    public Map<Integer, List<T>> getReversedSortedTokenMapByKey(final Stream<E> stream) {
-        return this.getReversedSortedTokenMapByKey(stream, this.getDefaultFilterFunction());
+    @Override
+    public Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream) {
+        return this.getReversedSortedTokenMapByKey(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER);
     }
 
+    @Override
     public Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream, final Comparator<? super Integer> comparator) {
-        return this.getSortedTokenMapByKey(stream, this.getDefaultFilterFunction(), comparator);
+        return this.getSortedTokenMapByKey(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER, comparator);
     }
 
     @Override

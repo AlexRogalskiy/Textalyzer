@@ -23,9 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer.utils;
 
+import com.wildbeeslabs.sensiblemetrics.textalyzer.ILexicalTokenAnalyzer;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,10 +36,12 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Stream;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -65,21 +69,39 @@ public class FileUtils {
         // PRIVATE EMPTY CONSTRUCTOR
     }
 
-    public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> List<E> readFile(final File inputFile) {
+    public static List<String> readAllLines(final File inputFile) {
         Objects.requireNonNull(inputFile);
-        try (final Stream<String> stream = Files.lines(inputFile.toPath(), FileUtils.DEFAULT_FILE_CHARACTER_ENCODING)) {
-            final Map<Integer, List<T>> wordsMap = LexicalUtils.getSortedTokenMapByWordLength(stream);
-            return LexicalUtils.getLexicalTokenTermList(wordsMap);
+        List<String> resultList = Collections.EMPTY_LIST;
+        try {
+            resultList = Files.readAllLines(inputFile.toPath(), FileUtils.DEFAULT_FILE_CHARACTER_ENCODING);
         } catch (IOException ex) {
             LOGGER.error(String.format("ERROR: cannot read from input file=%s, message=%s", String.valueOf(inputFile), ex.getMessage()));
         }
-        return null;
+        return resultList;
+    }
+
+    public static List<String> readFile(final File inputFile, final Predicate<String> predicate) {
+        Objects.requireNonNull(inputFile);
+        List<String> resultList = Collections.EMPTY_LIST;
+        try (final BufferedReader br = Files.newBufferedReader(inputFile.toPath(), FileUtils.DEFAULT_FILE_CHARACTER_ENCODING)) {
+            resultList = br.lines().filter(predicate).collect(Collectors.toList());
+        } catch (IOException ex) {
+            LOGGER.error(String.format("ERROR: cannot read from input file=%s, message=%s", String.valueOf(inputFile), ex.getMessage()));
+        }
+        return resultList;
+    }
+
+    public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> List<E> readFile(final File inputFile, final ILexicalTokenAnalyzer analyzer) {
+        Objects.requireNonNull(inputFile);
+        final List<String> stringList = readAllLines(inputFile);
+        final Map<Integer, List<T>> wordsMap = analyzer.getSortedTokenMapByKey(stringList.stream());
+        return analyzer.getLexicalTokenTermList(wordsMap);
     }
 
     public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> void writeFile(final File outputFile, final List<? extends E> output) {
         Objects.requireNonNull(outputFile);
         Objects.requireNonNull(output);
-        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(outputFile.toPath(), FileUtils.DEFAULT_FILE_CHARACTER_ENCODING))) {
+        try (final PrintWriter writer = new PrintWriter(Files.newBufferedWriter(outputFile.toPath(), FileUtils.DEFAULT_FILE_CHARACTER_ENCODING))) {
             output.stream().map(term -> term.toFormatString()).forEach(writer::println);
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             LOGGER.error(String.format("ERROR: cannot create output file=%s, message=%s", String.valueOf(outputFile), ex.getMessage()));

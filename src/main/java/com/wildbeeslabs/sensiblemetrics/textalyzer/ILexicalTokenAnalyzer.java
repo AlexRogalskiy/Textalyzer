@@ -25,42 +25,31 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.FileUtils;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import java.util.Map;
+import java.util.stream.Stream;
 
 /**
- * Text processor class to operate on input / output text stream
  *
- * @author alexander.rogalskiy
- * @version 1.0
+ * Lexical token analyzer interface declaration
+ *
+ * @author Alex
+ * @version 1.0.0
  * @since 2017-12-12
- *
+ * @param <E>
+ * @param <T>
  */
-public class TextProcessor {
+public interface ILexicalTokenAnalyzer<E extends CharSequence, T extends ILexicalToken<E>> {
 
-    /**
-     * Default logger instance
-     */
-    private static final Logger LOGGER = LogManager.getLogger(TextProcessor.class);
+    List<T> getLexicalTokenList(final Stream<E> stream);
 
-    public void init(final String[] args) {
-        LOGGER.info("Initializing command line processor...");
-        final CmdLineProcessor cmdProcessor = new CmdLineProcessor(args);
-        LOGGER.info("Initializing vowel lexical token analyzer...");
-        final VowelLexicalTokenAnalyzer<String, IVowelLexicalToken<String>> analyzer = new VowelLexicalTokenAnalyzer<>();
+    Map<Integer, List<T>> getTokenMapByLength(final Stream<E> stream);
 
-        List<ILexicalTokenTerm<String, ILexicalToken<String>>> tokenTermList = null;
-        if (Objects.nonNull(cmdProcessor.getInputSource())) {
-            tokenTermList = FileUtils.readFile(cmdProcessor.getInputSource(), analyzer);
-        }
-        if (Objects.nonNull(cmdProcessor.getOutputSource())) {
-            FileUtils.writeFile(cmdProcessor.getOutputSource(), tokenTermList);
-        }
-    }
+    Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream, final Comparator<? super Integer> comparator);
+
+    Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream);
+
+    <U extends ILexicalTokenTerm<E, T>> List<U> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap);
 }

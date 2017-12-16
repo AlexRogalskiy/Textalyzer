@@ -31,7 +31,7 @@ import org.junit.Test;
 
 /**
  *
- * Unit test case for Textalyzer Apploader class
+ * Unit test case for Apploader class
  *
  * @author Alex
  * @version 1.0.0

@@ -25,8 +25,8 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.FileUtils;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.LexicalUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +46,7 @@ import org.junit.Test;
 
 /**
  *
- * Unit test case for Textalyzer FileUtils class
+ * Unit test case for FileUtils class
  *
  * @author Alex
  * @version 1.0.0
@@ -59,33 +59,36 @@ public class FileUtilsTest {
      */
     private static final Logger LOGGER = LogManager.getLogger(FileUtilsTest.class);
 
+    private ILexicalTokenAnalyzer<String, IVowelLexicalToken<String>> analyzer;
+
     @Before
     public void setUp() {
+        this.analyzer = new VowelLexicalTokenAnalyzer<>();
     }
 
     @Test
     public void testReadFile() {
         String inputFile = "src/main/resources/INPUT.txt";
-        List<ILexicalTokenTerm<String, ILexicalToken<String>>> list = FileUtils.readFile(new File(inputFile));
+        List<ILexicalTokenTerm<String, ILexicalToken<String>>> list = FileUtils.readFile(new File(inputFile), this.analyzer);
         Assert.assertEquals("Checking the size of token list: ", 3, list.size());
 
         inputFile = "src/main/resources/INPUT2.txt";
-        list = FileUtils.readFile(new File(inputFile));
+        list = FileUtils.readFile(new File(inputFile), this.analyzer);
         Assert.assertEquals("Checking the size of token list:", 0, list.size());
 
         inputFile = "src/main/resources/INPUT3.txt";
-        list = FileUtils.readFile(new File(inputFile));
+        list = FileUtils.readFile(new File(inputFile), this.analyzer);
         Assert.assertEquals("Checking the size of token list:", 4, list.size());
     }
 
     @Test
     public void testWriteFileSortedDesc() {
         String inputString = "asffsa sadfas fsad asdffsda ";
-        Map<Integer, List<ILexicalToken<String>>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getTokenMapByLength(Stream.of(inputString));
         Assert.assertEquals("Checking the size of token list: ", 3, map.size());
 
         String outputFile = "src/main/e/OUTPUT.txt";
-        List<ILexicalTokenTerm<String, ILexicalToken<String>>> list = LexicalUtils.getLexicalTokenTermList(map);
+        List<ILexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
         Assert.assertEquals("Checking the size of output token list: ", 3, list.size());
         FileUtils.writeFile(new File(outputFile), list);
 
@@ -101,11 +104,11 @@ public class FileUtilsTest {
     @Test
     public void testWriteFileSortedAsc() {
         String inputString = "asffsa sadfas fsad asdffsda ";
-        Map<Integer, List<ILexicalToken<String>>> map = LexicalUtils.getSortedTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getSortedTokenMapByKey(Stream.of(inputString));
         Assert.assertEquals("Checking the size of token list: ", 3, map.size());
 
         String outputFile = "src/main/resources/OUTPUT.txt";
-        List<ILexicalTokenTerm<String, ILexicalToken<String>>> list = LexicalUtils.getLexicalTokenTermList(map);
+        List<ILexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
         Assert.assertEquals("Checking the size of output token list: ", 3, list.size());
         FileUtils.writeFile(new File(outputFile), list);
 

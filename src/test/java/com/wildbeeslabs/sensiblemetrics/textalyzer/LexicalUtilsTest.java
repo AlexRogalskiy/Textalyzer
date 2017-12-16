@@ -23,9 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer;
 
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.LexicalUtils;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
 
 import java.util.List;
 import java.util.Map;
@@ -40,7 +39,7 @@ import org.junit.Test;
 
 /**
  *
- * Unit test case for Textalyzer LexicalUtils class
+ * Unit test case for Vowel lexical token analyzer class
  *
  * @author Alex
  * @version 1.0.0
@@ -53,39 +52,42 @@ public class LexicalUtilsTest {
      */
     private static final Logger LOGGER = LogManager.getLogger(LexicalUtilsTest.class);
 
+    private ILexicalTokenAnalyzer<String, IVowelLexicalToken<String>> analyzer;
+
     @Before
     public void setUp() {
+        this.analyzer = new VowelLexicalTokenAnalyzer<>();
     }
 
     @Test
     public void testGetTokenMapByWordLength() {
         String inputString = "Base test simple string";
-        Map<Integer, List<ILexicalToken<String>>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getTokenMapByLength(Stream.of(inputString));
         Assert.assertEquals(2, map.size());
 
         inputString = "Base test";
-        map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
+        map = this.analyzer.getTokenMapByLength(Stream.of(inputString));
         Assert.assertEquals(1, map.size());
 
         inputString = "";
-        map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
+        map = this.analyzer.getTokenMapByLength(Stream.of(inputString));
         Assert.assertEquals(0, map.size());
     }
 
     @Test
     public void testGetSortedTokenMapByWordLength() {
         String inputString = "Base test simple string a new one";
-        Map<Integer, List<ILexicalToken<String>>> list = LexicalUtils.getSortedTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<IVowelLexicalToken<String>>> list = this.analyzer.getSortedTokenMapByKey(Stream.of(inputString));
         Assert.assertEquals(4, list.size());
     }
 
     @Test
     public void testGetLexicalTokenTermList() {
         String inputString = "sfd saf sdf f asdfs dsf sdf sdf ass";
-        Map<Integer, List<ILexicalToken<String>>> map = LexicalUtils.getTokenMapByWordLength(Stream.of(inputString));
+        Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getTokenMapByLength(Stream.of(inputString));
         Assert.assertEquals(3, map.size());
 
-        List<ILexicalTokenTerm<String, ILexicalToken<String>>> list = LexicalUtils.getLexicalTokenTermList(map);
+        List<ILexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
         Assert.assertEquals(3, list.size());
     }
 

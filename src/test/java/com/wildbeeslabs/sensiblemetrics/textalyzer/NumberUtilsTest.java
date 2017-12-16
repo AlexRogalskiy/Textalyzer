@@ -34,7 +34,7 @@ import org.junit.Test;
 
 /**
  *
- * Unit test case for Textalyzer NumberUtils class
+ * Unit test case for NumberUtils class
  *
  * @author Alex
  * @version 1.0.0
