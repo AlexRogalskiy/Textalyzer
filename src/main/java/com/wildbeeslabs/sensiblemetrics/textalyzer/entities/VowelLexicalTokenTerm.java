@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.textalyzer.entities;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.NumberUtils;
 
 import java.util.HashSet;
@@ -47,7 +48,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexicalToken<E>> extends BaseLexicalTokenTerm<E, T> {
+public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexicalToken<E>> extends BaseLexicalTokenTerm<E, T> implements IVowelLexicalTokenTerm<E, T> {
 
     private int tokenLength;
 
@@ -55,6 +56,7 @@ public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexic
         super();
     }
 
+    @Override
     public double getVowelCounterPerToken() {
         double result = 0.0;
         if (!this.getTokenList().isEmpty()) {
@@ -69,6 +71,7 @@ public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexic
         }).reduce(0, (a, b) -> a + b);
     }
 
+    @Override
     public Set<Character> getUniqueVowelSet() {
         final Set<Character> uniqueVowelSet = new HashSet<>();
         this.tokenList.stream().forEach((token) -> {

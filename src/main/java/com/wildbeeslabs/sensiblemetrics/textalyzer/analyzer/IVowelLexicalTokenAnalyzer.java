@@ -23,17 +23,16 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer;
 
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalTokenTerm;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
+import java.util.function.Function;
 
 /**
  *
- * Lexical token analyzer interface declaration
+ * Vowel lexical token analyzer interface declaration
  *
  * @author Alex
  * @version 1.0.0
@@ -42,15 +41,9 @@ import java.util.stream.Stream;
  * @param <T>
  * @param <U>
  */
-public interface ILexicalTokenAnalyzer<E extends CharSequence, T extends ILexicalToken<E>, U extends ILexicalTokenTerm<E, T>> {
+public interface IVowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelLexicalToken<E>, U extends IVowelLexicalTokenTerm<E, T>> extends ILexicalTokenAnalyzer<E, T, U> {
 
-    List<T> getLexicalTokenList(final Stream<E> stream);
+    Map<T, Integer> getTokenVowelCountMapByVowelString(final List<T> tokenList);
 
-    Map<Integer, List<T>> getTokenMapByLength(final Stream<E> stream);
-
-    Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream, final Comparator<? super Integer> comparator);
-
-    Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream);
-
-    List<U> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap);
+    Function<CharSequence, CharSequence> getFilterFunction(final String filterPattern);
 }

@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  *
@@ -40,5 +41,7 @@ public interface ILexicalToken<T extends CharSequence> extends Serializable {
     Set<Integer> getCharacterSet();
 
     int getLength();
+
+    UUID getId();
 
 }

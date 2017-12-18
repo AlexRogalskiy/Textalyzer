@@ -21,36 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer;
+package com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces;
 
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.Set;
 
 /**
  *
- * Lexical token analyzer interface declaration
+ * Vowel lexical token term interface declaration
  *
  * @author Alex
  * @version 1.0.0
  * @since 2017-12-12
- * @param <E>
  * @param <T>
- * @param <U>
+ * @param <E>
  */
-public interface ILexicalTokenAnalyzer<E extends CharSequence, T extends ILexicalToken<E>, U extends ILexicalTokenTerm<E, T>> {
+public interface IVowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexicalToken<E>> extends ILexicalTokenTerm<E, T> {
 
-    List<T> getLexicalTokenList(final Stream<E> stream);
+    Set<Character> getUniqueVowelSet();
 
-    Map<Integer, List<T>> getTokenMapByLength(final Stream<E> stream);
-
-    Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream, final Comparator<? super Integer> comparator);
-
-    Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream);
-
-    List<U> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap);
+    double getVowelCounterPerToken();
 }

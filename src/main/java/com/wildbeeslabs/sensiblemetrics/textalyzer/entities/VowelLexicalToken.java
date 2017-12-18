@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.textalyzer.entities;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
+
 import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Collectors;

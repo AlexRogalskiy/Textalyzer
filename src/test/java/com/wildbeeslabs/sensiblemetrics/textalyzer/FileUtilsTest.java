@@ -23,11 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer;
 
-import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.ILexicalTokenAnalyzer;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.IVowelLexicalTokenAnalyzer;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.VowelLexicalTokenAnalyzer;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.FileUtils;
 
 import java.io.File;
@@ -61,7 +60,7 @@ public class FileUtilsTest {
      */
     private static final Logger LOGGER = LogManager.getLogger(FileUtilsTest.class);
 
-    private ILexicalTokenAnalyzer<String, IVowelLexicalToken<String>> analyzer;
+    private IVowelLexicalTokenAnalyzer<String, IVowelLexicalToken<String>, IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> analyzer;
 
     @Before
     public void setUp() {
@@ -72,7 +71,7 @@ public class FileUtilsTest {
     @Test
     public void testReadFile() {
         String inputFile = "src/main/resources/INPUT.txt";
-        List<ILexicalTokenTerm<String, ILexicalToken<String>>> list = FileUtils.readFile(new File(inputFile), this.analyzer);
+        List<IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> list = FileUtils.readFile(new File(inputFile), this.analyzer);
         Assert.assertEquals("Checking the size of token list: ", 3, list.size());
 
         inputFile = "src/main/resources/INPUT2.txt";
@@ -91,7 +90,7 @@ public class FileUtilsTest {
         Assert.assertEquals("Checking the size of token list: ", 3, map.size());
 
         String outputFile = "src/main/e/OUTPUT.txt";
-        List<ILexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
+        List<IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
         Assert.assertEquals("Checking the size of output token list: ", 3, list.size());
         FileUtils.writeFile(new File(outputFile), list);
 
@@ -111,7 +110,7 @@ public class FileUtilsTest {
         Assert.assertEquals("Checking the size of token list: ", 3, map.size());
 
         String outputFile = "src/main/resources/OUTPUT.txt";
-        List<ILexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
+        List<IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
         Assert.assertEquals("Checking the size of output token list: ", 3, list.size());
         FileUtils.writeFile(new File(outputFile), list);
 

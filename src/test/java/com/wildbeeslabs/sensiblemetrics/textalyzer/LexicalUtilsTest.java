@@ -23,10 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer;
 
-import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.ILexicalTokenAnalyzer;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.IVowelLexicalTokenAnalyzer;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.VowelLexicalTokenAnalyzer;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalTokenTerm;
 
 import java.util.List;
 import java.util.Map;
@@ -54,7 +54,7 @@ public class LexicalUtilsTest {
      */
     private static final Logger LOGGER = LogManager.getLogger(LexicalUtilsTest.class);
 
-    private ILexicalTokenAnalyzer<String, IVowelLexicalToken<String>> analyzer;
+    private IVowelLexicalTokenAnalyzer<String, IVowelLexicalToken<String>, IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> analyzer;
 
     @Before
     public void setUp() {
@@ -90,7 +90,7 @@ public class LexicalUtilsTest {
         Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getTokenMapByLength(Stream.of(inputString));
         Assert.assertEquals(3, map.size());
 
-        List<ILexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
+        List<IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
         Assert.assertEquals(3, list.size());
     }
 

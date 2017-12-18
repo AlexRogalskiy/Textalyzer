@@ -42,6 +42,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -64,11 +65,11 @@ public class FileUtils {
      * Default file character encoding
      */
     public static final Charset DEFAULT_FILE_CHARACTER_ENCODING = StandardCharsets.UTF_8;
-
+    
     private FileUtils() {
         // PRIVATE EMPTY CONSTRUCTOR
     }
-
+    
     public static List<String> readAllLines(final File inputFile) {
         Objects.requireNonNull(inputFile);
         List<String> resultList = Collections.EMPTY_LIST;
@@ -79,8 +80,8 @@ public class FileUtils {
         }
         return resultList;
     }
-
-    public static List<String> readFile(final File inputFile, final Predicate<String> predicate) {
+    
+    public static List<String> readFileByFilter(final File inputFile, final Predicate<String> predicate) {
         Objects.requireNonNull(inputFile);
         List<String> resultList = Collections.EMPTY_LIST;
         try (final BufferedReader br = Files.newBufferedReader(inputFile.toPath(), FileUtils.DEFAULT_FILE_CHARACTER_ENCODING)) {
@@ -90,14 +91,14 @@ public class FileUtils {
         }
         return resultList;
     }
-
-    public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> List<E> readFile(final File inputFile, final ILexicalTokenAnalyzer analyzer) {
+    
+    public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> List<E> readFile(final File inputFile, final ILexicalTokenAnalyzer<U, T, E> analyzer) {
         Objects.requireNonNull(inputFile);
         final List<String> stringList = readAllLines(inputFile);
-        final Map<Integer, List<T>> wordsMap = analyzer.getSortedTokenMapByKey(stringList.stream());
+        final Map<Integer, List<T>> wordsMap = analyzer.getSortedTokenMapByKey(stringList.stream().map(word -> (U) word));
         return analyzer.getLexicalTokenTermList(wordsMap);
     }
-
+    
     public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> void writeFile(final File outputFile, final List<? extends E> output) {
         Objects.requireNonNull(outputFile);
         Objects.requireNonNull(output);

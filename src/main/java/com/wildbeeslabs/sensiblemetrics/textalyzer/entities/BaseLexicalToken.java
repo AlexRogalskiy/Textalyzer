@@ -24,13 +24,18 @@
 package com.wildbeeslabs.sensiblemetrics.textalyzer.entities;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
+
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -52,6 +57,9 @@ public abstract class BaseLexicalToken<T extends CharSequence> implements ILexic
      */
     public static final BaseLexicalToken.LexicalComparator<String> DEFAULT_TOKEN_SORT_COMPARATOR = new BaseLexicalToken.LexicalComparator<>();
 
+    @Setter(AccessLevel.NONE)
+    private final UUID id;
+
     protected Comparator<? super String> comparator;
     protected T value;
 
@@ -66,6 +74,7 @@ public abstract class BaseLexicalToken<T extends CharSequence> implements ILexic
     public BaseLexicalToken(final T value, final Comparator<? super String> comparator) {
         this.value = value;
         this.comparator = comparator;
+        this.id = UUID.randomUUID();
     }
 
     @Override

@@ -23,10 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer;
 
+import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.ILexicalTokenAnalyzer;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.VowelLexicalTokenAnalyzer;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.FileUtils;
 
 import java.util.List;
@@ -54,9 +54,9 @@ public class TextProcessor {
         LOGGER.info("Initializing command line processor...");
         final CmdLineProcessor cmdProcessor = new CmdLineProcessor(args);
         LOGGER.info("Initializing vowel lexical token analyzer...");
-        final VowelLexicalTokenAnalyzer<String, IVowelLexicalToken<String>> analyzer = new VowelLexicalTokenAnalyzer<>();
+        final ILexicalTokenAnalyzer<String, IVowelLexicalToken<String>, IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> analyzer = new VowelLexicalTokenAnalyzer<>();
 
-        List<ILexicalTokenTerm<String, ILexicalToken<String>>> tokenTermList = null;
+        List<IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> tokenTermList = null;
         if (Objects.nonNull(cmdProcessor.getInputSource())) {
             tokenTermList = FileUtils.readFile(cmdProcessor.getInputSource(), analyzer);
         }

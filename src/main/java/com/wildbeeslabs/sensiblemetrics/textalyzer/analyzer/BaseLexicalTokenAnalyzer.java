@@ -48,9 +48,10 @@ import org.apache.log4j.Logger;
  * @since 2017-12-12
  * @param <E>
  * @param <T>
+ * @param <U>
  *
  */
-public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends ILexicalToken<E>> implements ILexicalTokenAnalyzer<E, T> {
+public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends ILexicalToken<E>, U extends ILexicalTokenTerm<E, T>> implements ILexicalTokenAnalyzer<E, T, U> {
 
     /**
      * Default logger instance
@@ -95,7 +96,7 @@ public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends
     }
 
     @Override
-    public <U extends ILexicalTokenTerm<E, T>> List<U> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap) {
+    public List<U> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap) {
         final List<U> tokenTermList = new ArrayList<>(tokenMap.size());
         for (final Map.Entry<Integer, List<T>> tokenEntry : tokenMap.entrySet()) {
             final U tokenTerm = this.createLexicalTokenTerm();
@@ -106,7 +107,7 @@ public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends
         return tokenTermList;
     }
 
-    protected abstract <U extends ILexicalTokenTerm<E, T>> U createLexicalTokenTerm();
+    protected abstract U createLexicalTokenTerm();
 
     protected abstract T createLexicalToken(final E value);
 }

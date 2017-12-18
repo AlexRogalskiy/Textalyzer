@@ -25,8 +25,8 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.VowelLexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.VowelLexicalTokenTerm;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalTokenTerm;
 
 import java.util.Comparator;
 import java.util.List;
@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -47,7 +48,7 @@ import org.apache.commons.lang3.StringUtils;
  * @param <T>
  *
  */
-public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelLexicalToken<E>> extends BaseLexicalTokenAnalyzer<E, T> {
+public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelLexicalToken<E>, U extends IVowelLexicalTokenTerm<E, T>> extends BaseLexicalTokenAnalyzer<E, T, U> implements IVowelLexicalTokenAnalyzer<E, T, U> {
 
     /**
      * Default token filter pattern
@@ -62,6 +63,7 @@ public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelL
         return this.getLexicalTokenList(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER);
     }
 
+    @Override
     public Function<CharSequence, CharSequence> getFilterFunction(final String filterPattern) {
         return (word -> String.valueOf(word).replaceAll(filterPattern, StringUtils.EMPTY).toLowerCase().trim());
     }
@@ -75,8 +77,13 @@ public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelL
         return this.getTokenMapByLength(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER);
     }
 
+    @Override
     public Map<T, Integer> getTokenVowelCountMapByVowelString(final List<T> tokenList) {
         return tokenList.parallelStream().collect(Collectors.toMap(token -> token, token -> token.getVowelCount(), Integer::sum));
+    }
+
+    protected Map<String, Integer> getTokenVowelCountMap(final List<T> tokenList) {
+        return tokenList.parallelStream().collect(Collectors.toMap(token -> token.getId().toString(), token -> token.getVowelCount(), Integer::sum));
     }
 
     @Override
@@ -95,7 +102,7 @@ public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelL
     }
 
     @Override
-    protected <U extends ILexicalTokenTerm<E, T>> U createLexicalTokenTerm() {
+    protected U createLexicalTokenTerm() {
         return (U) new VowelLexicalTokenTerm<>();
     }
 }
