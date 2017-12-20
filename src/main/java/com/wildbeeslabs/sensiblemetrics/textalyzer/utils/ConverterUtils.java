@@ -23,14 +23,18 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer.utils;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.IntSummaryStatistics;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -91,7 +95,54 @@ public class ConverterUtils {
         return stream.collect(Collectors.mapping(mapper, Collectors.toList()));
     }
 
+    public static <E, U> Stream<U> getStreamBy(final Stream<E> stream, final Function<E, U> mapper, final Predicate<U> predicate) {
+        return stream.map(mapper).filter(predicate);
+    }
+
+    public static <E> Stream<E> getStreamSortedBy(final Stream<E> stream, final Comparator<? super E> cmp) {
+        return stream.sorted(cmp);
+    }
+
     public static <T, K> Map<K, Integer> getMapSumBy(final Stream<T> stream, final Function<T, K> keys, final Function<T, Integer> values) {
         return stream.collect(Collectors.toMap(keys, values, Integer::sum));
+    }
+
+    public static <A, B, C> Function<A, C> compose(Function<A, B> f1, Function<B, C> f2) {
+        return f1.andThen(f2);
+    }
+
+    public static <T> Collection<T> join(final Collection<T> first, final Collection<T> second, final Predicate<? super T> predicate) {
+        return Stream.concat(first.stream(), second.stream()).filter(predicate).collect(Collectors.toList());
+    }
+
+    public static String join(final Collection<String> collection, final String delimiter) {
+        return collection.stream().collect(Collectors.joining(delimiter));
+    }
+
+    public static <K, V> String join(final Map<K, V> map, final String keyValueDelimiter, final String delimiter) {
+        return map.entrySet().stream().map(entry -> entry.getKey() + keyValueDelimiter + entry.getValue()).collect(Collectors.joining(delimiter));
+    }
+
+    public static String[] join(final String[] first, final String[] second) {
+        return Stream.concat(Arrays.stream(first), Arrays.stream(second)).toArray(String[]::new);
+    }
+
+    public static String join(final String[] array, final String delimiter) {
+        return Arrays.stream(array).collect(Collectors.joining(delimiter));
+    }
+
+    public static Map<Integer, List<String>> getMapByLength(final String[] array) {
+        return Arrays.stream(array).filter(Objects::nonNull).collect(Collectors.groupingBy(String::length));
+    }
+
+    public static String[] getArrayBy(final String[] array, final Predicate<? super String> predicate) {
+        return Arrays.stream(array).filter(predicate).toArray(size -> new String[size]);
+    }
+
+    public static List<String> split(final String value, final String delimiter, final Predicate<? super String> predicate) {
+        return Arrays.stream(String.valueOf(value).split(delimiter))
+                .map(String::trim)
+                .filter(predicate)
+                .collect(Collectors.toList());
     }
 }
