@@ -25,19 +25,15 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.ConverterUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.IntSummaryStatistics;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.ToIntFunction;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
@@ -77,44 +73,36 @@ public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends
     }
 
     protected List<T> getLexicalTokenList(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim) {
-        final List<T> tokenList = this.getFilteredStream(stream, tokenFilter, tokenDelim)
-                .collect(Collectors.mapping(word -> createLexicalToken((E) word), Collectors.toList()));
-        return tokenList;
+        final Stream<E> filteredStream = this.getFilteredStream(stream, tokenFilter, tokenDelim);
+        return ConverterUtils.convertToList(filteredStream, word -> createLexicalToken((E) word));
     }
 
     protected Map<Integer, Set<T>> getUniqueTokenMapByLength(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim) {
         final Stream<E> tokenStream = this.getFilteredStream(stream, tokenFilter, tokenDelim);
-        final Map<Integer, Set<T>> tokenMap = tokenStream.collect(Collectors.groupingBy(word -> word.length(), Collectors.mapping(word -> createLexicalToken((E) word), Collectors.toSet())));
-        return tokenMap;
+        return ConverterUtils.getMapSetBy(tokenStream, (word) -> word.length(), (word) -> createLexicalToken((E) word));
     }
 
     protected Map<Integer, List<T>> getTokenMapByLength(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim) {
         final Stream<E> tokenStream = this.getFilteredStream(stream, tokenFilter, tokenDelim);
-        return tokenStream.collect(Collectors.groupingBy(word -> word.length(), Collectors.mapping(word -> createLexicalToken((E) word), Collectors.toList())));
+        return ConverterUtils.getMapListBy(tokenStream, (word) -> word.length(), (word) -> createLexicalToken((E) word));
     }
 
     protected Map<Integer, Long> getCountMapByLength(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim) {
         final Stream<E> tokenStream = this.getFilteredStream(stream, tokenFilter, tokenDelim);
-        return tokenStream.collect(Collectors.groupingBy(word -> word.length(), Collectors.counting()));
-    }
-
-    protected Map<Integer, Optional<T>> getTokenBy(final List<T> list, final Function<T, Integer> function, final Comparator<? super T> cmp) {
-        return list.stream().collect(Collectors.groupingBy(function, Collectors.maxBy(cmp)));
-    }
-
-    protected Map<Integer, IntSummaryStatistics> getTokenStatsBy(final List<T> list, final Function<T, Integer> function, final ToIntFunction<? super T> mapper) {
-        return list.stream().collect(Collectors.groupingBy(function, Collectors.summarizingInt(mapper)));
+        return ConverterUtils.getCountMapBy(tokenStream, word -> word.length());
     }
 
     protected Map<Integer, List<T>> getReversedSortedTokenMapByKey(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim) {
         return this.getSortedTokenMapByKey(stream, tokenFilter, tokenDelim, Comparator.reverseOrder());
     }
 
+    protected Map<String, T> getTokenMapById(final List<T> list) {
+        return ConverterUtils.convertTokenListToMap(list, (token) -> token.getId().toString(), (token) -> token);
+    }
+
     protected Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim, final Comparator<? super Integer> comparator) {
         final Map<Integer, List<T>> tokenMap = this.getTokenMapByLength(stream, tokenFilter, tokenDelim);
-        return tokenMap.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey(comparator))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        return ConverterUtils.getSortedTokenMapByKey(tokenMap, comparator);
     }
 
     @Override
