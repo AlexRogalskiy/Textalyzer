@@ -79,17 +79,17 @@ public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends
 
     protected Map<Integer, Set<T>> getUniqueTokenMapByLength(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim) {
         final Stream<E> tokenStream = this.getFilteredStream(stream, tokenFilter, tokenDelim);
-        return ConverterUtils.getMapSetBy(tokenStream, (word) -> word.length(), (word) -> createLexicalToken((E) word));
+        return ConverterUtils.convertToMapSet(tokenStream, (word) -> word.length(), (word) -> createLexicalToken((E) word));
     }
 
     protected Map<Integer, List<T>> getTokenMapByLength(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim) {
         final Stream<E> tokenStream = this.getFilteredStream(stream, tokenFilter, tokenDelim);
-        return ConverterUtils.getMapListBy(tokenStream, (word) -> word.length(), (word) -> createLexicalToken((E) word));
+        return ConverterUtils.convertToMapList(tokenStream, (word) -> word.length(), (word) -> createLexicalToken((E) word));
     }
 
     protected Map<Integer, Long> getCountMapByLength(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim) {
         final Stream<E> tokenStream = this.getFilteredStream(stream, tokenFilter, tokenDelim);
-        return ConverterUtils.getCountMapBy(tokenStream, word -> word.length());
+        return ConverterUtils.getMapCountBy(tokenStream, word -> word.length());
     }
 
     protected Map<Integer, List<T>> getReversedSortedTokenMapByKey(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim) {
@@ -97,12 +97,12 @@ public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends
     }
 
     protected Map<String, T> getTokenMapById(final List<T> list) {
-        return ConverterUtils.convertTokenListToMap(list, (token) -> token.getId().toString(), (token) -> token);
+        return ConverterUtils.convertToMap(list.stream(), (token) -> token.getId().toString(), (token) -> token);
     }
 
     protected Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim, final Comparator<? super Integer> comparator) {
         final Map<Integer, List<T>> tokenMap = this.getTokenMapByLength(stream, tokenFilter, tokenDelim);
-        return ConverterUtils.getSortedTokenMapByKey(tokenMap, comparator);
+        return ConverterUtils.getSortedMapByKey(tokenMap, comparator);
     }
 
     @Override

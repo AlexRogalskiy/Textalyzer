@@ -57,41 +57,41 @@ public class ConverterUtils {
         // PRIVATE EMPTY CONSTRUCTOR
     }
 
-    public static <T, K, V> Map<K, V> convertTokenListToMap(final List<T> list, final Function<T, K> function1, final Function<T, V> function2) {
-        return list.stream().collect(Collectors.toMap(function1, function2));
+    public static <T, K, V> Map<K, V> convertToMap(final Stream<T> stream, final Function<T, K> keys, final Function<T, V> values) {
+        return stream.collect(Collectors.toMap(keys, values));
     }
 
-    public static <K, T> Map<K, List<T>> getSortedTokenMapByKey(final Map<K, List<T>> map, final Comparator<? super K> comparator) {
+    public static <K, T> Map<K, List<T>> getSortedMapByKey(final Map<K, List<T>> map, final Comparator<? super K> comparator) {
         return map.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(comparator))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
-    public static <T> Map<Integer, IntSummaryStatistics> getTokenStatisticsBy(final List<T> list, final Function<T, Integer> function, final ToIntFunction<? super T> mapper) {
-        return list.stream().collect(Collectors.groupingBy(function, Collectors.summarizingInt(mapper)));
+    public static <T> Map<Integer, IntSummaryStatistics> getMapStatisticsBy(final Stream<T> stream, final Function<T, Integer> groupingBy, final ToIntFunction<? super T> mapper) {
+        return stream.collect(Collectors.groupingBy(groupingBy, Collectors.summarizingInt(mapper)));
     }
 
-    public static <T, K> Map<K, Optional<T>> getTokenBy(final List<T> list, final Function<T, K> function, final Comparator<? super T> cmp) {
-        return list.stream().collect(Collectors.groupingBy(function, Collectors.maxBy(cmp)));
+    public static <T, K> Map<K, Optional<T>> getMapMaxBy(final Stream<T> stream, final Function<T, K> groupingBy, final Comparator<? super T> cmp) {
+        return stream.collect(Collectors.groupingBy(groupingBy, Collectors.maxBy(cmp)));
     }
 
-    public static <E> Map<Integer, Long> getCountMapBy(final Stream<E> stream, final Function<E, Integer> function) {
-        return stream.collect(Collectors.groupingBy(function, Collectors.counting()));
+    public static <E> Map<Integer, Long> getMapCountBy(final Stream<E> stream, final Function<E, Integer> groupingBy) {
+        return stream.collect(Collectors.groupingBy(groupingBy, Collectors.counting()));
     }
 
-    public static <E, K, U> Map<K, List<U>> getMapListBy(final Stream<E> stream, final Function<E, K> function, final Function<E, U> mapper) {
-        return stream.collect(Collectors.groupingBy(function, Collectors.mapping(mapper, Collectors.toList())));
+    public static <E, K, U> Map<K, List<U>> convertToMapList(final Stream<E> stream, final Function<E, K> groupingBy, final Function<E, U> mapper) {
+        return stream.collect(Collectors.groupingBy(groupingBy, Collectors.mapping(mapper, Collectors.toList())));
     }
 
-    public static <E, K, U> Map<K, Set<U>> getMapSetBy(final Stream<E> stream, final Function<E, K> function, final Function<E, U> mapper) {
-        return stream.collect(Collectors.groupingBy(function, Collectors.mapping(mapper, Collectors.toSet())));
+    public static <E, K, U> Map<K, Set<U>> convertToMapSet(final Stream<E> stream, final Function<E, K> groupingBy, final Function<E, U> mapper) {
+        return stream.collect(Collectors.groupingBy(groupingBy, Collectors.mapping(mapper, Collectors.toSet())));
     }
 
     public static <E, U> List<U> convertToList(final Stream<E> stream, final Function<E, U> mapper) {
         return stream.collect(Collectors.mapping(mapper, Collectors.toList()));
     }
 
-    public static <T, K> Map<K, Integer> getCountSumBy(final List<T> tokenList, final Function<T, K> function1, final Function<T, Integer> function2) {
-        return tokenList.stream().collect(Collectors.toMap(function1, function2, Integer::sum));
+    public static <T, K> Map<K, Integer> getMapSumBy(final Stream<T> stream, final Function<T, K> keys, final Function<T, Integer> values) {
+        return stream.collect(Collectors.toMap(keys, values, Integer::sum));
     }
 }

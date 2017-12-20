@@ -79,11 +79,11 @@ public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelL
 
     @Override
     public Map<T, Integer> getTokenVowelCountMapByVowelString(final List<T> tokenList) {
-        return ConverterUtils.getCountSumBy(tokenList, token -> token, token -> token.getVowelCount());
+        return ConverterUtils.getMapSumBy(tokenList.stream(), token -> token, token -> token.getVowelCount());
     }
 
     protected Map<String, Integer> getTokenVowelCountMap(final List<T> tokenList) {
-        return ConverterUtils.getCountSumBy(tokenList, token -> token.getId().toString(), token -> token.getVowelCount());
+        return ConverterUtils.getMapSumBy(tokenList.stream(), token -> token.getId().toString(), token -> token.getVowelCount());
     }
 
     @Override
