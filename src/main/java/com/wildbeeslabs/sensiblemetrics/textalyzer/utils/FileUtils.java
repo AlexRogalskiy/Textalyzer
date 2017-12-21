@@ -29,19 +29,26 @@ import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalT
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -64,11 +71,11 @@ public class FileUtils {
      * Default file character encoding
      */
     public static final Charset DEFAULT_FILE_CHARACTER_ENCODING = StandardCharsets.UTF_8;
-    
+
     private FileUtils() {
         // PRIVATE EMPTY CONSTRUCTOR
     }
-    
+
     public static List<String> readAllLines(final File inputFile) {
         Objects.requireNonNull(inputFile);
         List<String> resultList = Collections.EMPTY_LIST;
@@ -79,7 +86,7 @@ public class FileUtils {
         }
         return resultList;
     }
-    
+
     public static List<String> readFileByFilter(final File inputFile, final Predicate<String> predicate) {
         Objects.requireNonNull(inputFile);
         List<String> resultList = Collections.EMPTY_LIST;
@@ -90,23 +97,90 @@ public class FileUtils {
         }
         return resultList;
     }
-    
+
     public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> List<E> readFile(final File inputFile, final ILexicalTokenAnalyzer<U, T, E> analyzer) {
         Objects.requireNonNull(inputFile);
         final List<String> stringList = readAllLines(inputFile);
         final Map<Integer, List<T>> wordsMap = analyzer.getSortedTokenMapByKey(stringList.stream().map(word -> (U) word));
         return analyzer.getLexicalTokenTermList(wordsMap);
     }
-    
+
     public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> void writeFile(final File outputFile, final List<? extends E> output) {
         Objects.requireNonNull(outputFile);
         Objects.requireNonNull(output);
         try (final PrintWriter writer = new PrintWriter(Files.newBufferedWriter(outputFile.toPath(), FileUtils.DEFAULT_FILE_CHARACTER_ENCODING))) {
-            output.stream().map(term -> term.toFormatString()).forEach(writer::println);
+            output.stream().map(term -> term.toFormatString()).forEach(writer::println);//String newLine = System.getProperty("line.separator");
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             LOGGER.error(String.format("ERROR: cannot create output file=%s, message=%s", String.valueOf(outputFile), ex.getMessage()));
         } catch (IOException ex) {
             LOGGER.error(String.format("ERROR: cannot process read / writer operations on file=%s, message=%s", String.valueOf(outputFile), ex.getMessage()));
+        }
+    }
+
+    public static void writeZipFile(final List<File> listFiles, final File outputZip) throws IOException {
+        outputZip.getParentFile().mkdirs();
+        try (final ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(outputZip))) {
+            for (final File file : listFiles) {
+                final String filePath = file.getCanonicalPath();
+                LOGGER.debug(String.format("Processing zip file: %s", filePath));
+
+                final String zipFilePath = Paths.get(filePath).getFileName().toString();
+                final ZipEntry zipEntry = new ZipEntry(zipFilePath);
+                zipOutputStream.putNextEntry(zipEntry);
+
+                try (final FileInputStream inputStream = new FileInputStream(file)) {
+                    byte[] bytes = new byte[1024];
+                    int length;
+                    while ((length = inputStream.read(bytes)) >= 0) {
+                        zipOutputStream.write(bytes, 0, length);
+                    }
+                }
+            }
+        }
+    }
+
+    public static List<File> listFiles(final File inputDirectory) throws IOException {
+        final List<File> listFiles = new ArrayList<>();
+        listFiles(listFiles, inputDirectory);
+        return listFiles;
+    }
+
+    private static void listFiles(final List<File> listFiles, final File inputDirectory) throws IOException {
+        final File[] allFiles = inputDirectory.listFiles();
+        for (final File file : allFiles) {
+            if (file.isDirectory()) {
+                listFiles(listFiles, file);
+            } else {
+                listFiles.add(file);
+            }
+        }
+    }
+
+    public static List<File> listDirectories(final File inputDirectory) {
+        final List<File> listDirectories = new ArrayList<>();
+        listDirectories(listDirectories, inputDirectory);
+        return listDirectories;
+    }
+
+    private static void listDirectories(final List<File> listDirectories, final File inputDirectory) {
+        final File[] directories = inputDirectory.listFiles(File::isDirectory);
+        for (final File directory : directories) {
+            listDirectories.add(directory);
+            listDirectories(listDirectories, directory);
+        }
+    }
+
+    public static List<File> listDirectories2(final File inputDirectory) {
+        final List<File> listDirectories = new ArrayList<>();
+        listDirectories2(listDirectories, inputDirectory);
+        return listDirectories;
+    }
+
+    private static void listDirectories2(final List<File> listDirectories, final File inputFile) {
+        final File[] directories = inputFile.listFiles((File current, String name) -> new File(current, name).isDirectory());
+        for (final File directory : directories) {
+            listDirectories.add(directory);
+            listDirectories2(directory);
         }
     }
 }
