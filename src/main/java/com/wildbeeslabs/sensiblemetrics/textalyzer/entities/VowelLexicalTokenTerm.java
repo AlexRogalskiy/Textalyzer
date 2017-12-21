@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer.entities;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalTokenTerm;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.ConverterUtils;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.NumberUtils;
 
 import java.util.HashSet;
@@ -66,9 +67,7 @@ public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexic
     }
 
     private int getVowelCounter() {
-        return this.tokenList.stream().map((token) -> {
-            return token.getVowelCount();
-        }).reduce(0, (a, b) -> a + b);
+        return ConverterUtils.reduceStreamBy(this.tokenList.stream().map((token) -> { return token.getVowelCount(); }), 0, (i1, i2) -> i1 + i2);
     }
 
     @Override

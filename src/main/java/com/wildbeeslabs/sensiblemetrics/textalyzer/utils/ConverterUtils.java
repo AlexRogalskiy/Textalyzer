@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
@@ -97,6 +98,10 @@ public class ConverterUtils {
 
     public static <E, U> Stream<U> getStreamBy(final Stream<E> stream, final Function<E, U> mapper, final Predicate<U> predicate) {
         return stream.map(mapper).filter(predicate);
+    }
+
+    public static <T extends Number> T reduceStreamBy(final Stream<T> stream, final T identity, final BinaryOperator<T> accumulator) {
+        return stream.reduce(identity, accumulator);
     }
 
     public static <E> Stream<E> getStreamSortedBy(final Stream<E> stream, final Comparator<? super E> cmp) {
