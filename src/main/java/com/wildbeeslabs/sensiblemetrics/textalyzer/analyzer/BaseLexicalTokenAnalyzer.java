@@ -35,6 +35,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.LogManager;
@@ -51,18 +53,21 @@ import org.apache.log4j.Logger;
  * @param <U>
  *
  */
+@EqualsAndHashCode(callSuper = false)
+@ToString
 public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends ILexicalToken<E>, U extends ILexicalTokenTerm<E, T>> implements ILexicalTokenAnalyzer<E, T, U> {
 
     /**
      * Default logger instance
      */
-    private final Logger LOGGER = LogManager.getLogger(getClass());
+    protected final Logger LOGGER = LogManager.getLogger(getClass());
     /**
      * Default token delimiter
      */
-    public static final String DEFAULT_TOKEN_DELIMITER = "\\s+";
+    public static final String DEFAULT_TOKEN_DELIMITER = "[,./?;:!-\"\\s]+?";
 
     public BaseLexicalTokenAnalyzer() {
+        getLogger().debug("Initializing base lexical token analyzer...");
     }
 
     protected Stream<E> getFilteredStream(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim) {
@@ -108,13 +113,19 @@ public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends
     @Override
     public List<U> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap) {
         final List<U> tokenTermList = new ArrayList<>(tokenMap.size());
-        for (final Map.Entry<Integer, List<T>> tokenEntry : tokenMap.entrySet()) {
+        tokenMap.entrySet().stream().map((tokenEntry) -> {
             final U tokenTerm = this.createLexicalTokenTerm();
             tokenTerm.setTokens(tokenEntry.getValue());
             tokenTerm.setTokenLength(tokenEntry.getKey());
+            return tokenTerm;
+        }).forEach((tokenTerm) -> {
             tokenTermList.add(tokenTerm);
-        }
+        });
         return tokenTermList;
+    }
+    
+    protected Logger getLogger() {
+        return this.LOGGER;
     }
 
     protected abstract U createLexicalTokenTerm();

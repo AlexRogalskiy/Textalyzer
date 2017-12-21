@@ -34,6 +34,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -48,6 +51,9 @@ import org.apache.commons.lang3.StringUtils;
  * @param <U>
  *
  */
+@Value(staticConstructor="getInstance")
+@EqualsAndHashCode(callSuper = true)
+@ToString
 public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelLexicalToken<E>, U extends IVowelLexicalTokenTerm<E, T>> extends BaseLexicalTokenAnalyzer<E, T, U> implements IVowelLexicalTokenAnalyzer<E, T, U> {
 
     /**
@@ -56,6 +62,7 @@ public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelL
     public static final String DEFAULT_TOKEN_FILTER_PATTERN = "[^a-zA-Z]";
 
     public VowelLexicalTokenAnalyzer() {
+        getLogger().debug("Initializing vowel lexical token analyzer...");
     }
 
     @Override

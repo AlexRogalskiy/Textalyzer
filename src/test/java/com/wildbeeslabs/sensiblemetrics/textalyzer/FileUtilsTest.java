@@ -105,13 +105,13 @@ public class FileUtilsTest {
 
     @Test
     public void testWriteFileSortedAsc() {
-        String inputString = "asffsa sadfas fsad asdffsda ";
+        String inputString = "asf;fsa sadfas; fsad asdffsda ";
         Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getSortedTokenMapByKey(Stream.of(inputString));
-        Assert.assertEquals("Checking the size of token list: ", 3, map.size());
+        Assert.assertEquals("Checking the size of token list: ", 4, map.size());
 
         String outputFile = "src/main/resources/OUTPUT.txt";
         List<IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
-        Assert.assertEquals("Checking the size of output token list: ", 3, list.size());
+        Assert.assertEquals("Checking the size of output token list: ", 4, list.size());
         FileUtils.writeFile(new File(outputFile), list);
 
         try (final Stream<String> stream = Files.lines(Paths.get(outputFile), FileUtils.DEFAULT_FILE_CHARACTER_ENCODING)) {
