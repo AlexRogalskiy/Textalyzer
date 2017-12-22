@@ -68,8 +68,8 @@ public class VowelLexicalToken<T extends CharSequence> extends BaseLexicalToken<
     }
 
     @Override
-    public Set<Character> getVowelCharacterSet() {
-        return Stream.of(this.getVowelsAsString())
+    public Set<Character> vowelCharacterSet() {
+        return Stream.of(this.toVowelString())
                 .flatMapToInt(CharSequence::chars)
                 .distinct()
                 .mapToObj(c -> Character.valueOf((char) c))
@@ -77,19 +77,19 @@ public class VowelLexicalToken<T extends CharSequence> extends BaseLexicalToken<
     }
 
     @Override
-    public int getVowelCount() {
-        return this.getVowelsAsString().length();
+    public int vowelCount() {
+        return this.toVowelString().length();
     }
 
     public String getDistinctVowelString() {
-        return Stream.of(this.getVowelsAsString()
+        return Stream.of(this.toVowelString()
                 .split(StringUtils.EMPTY))
                 .distinct()
                 .sorted(VowelLexicalToken.DEFAULT_TOKEN_SORT_COMPARATOR)
                 .collect(Collectors.joining(StringUtils.EMPTY));
     }
 
-    private String getVowelsAsString() {
+    private String toVowelString() {
         return String.valueOf(this.value).replaceAll(DEFAULT_TOKEN_VOWELS_PATTERN, StringUtils.EMPTY);
     }
 }

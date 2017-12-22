@@ -38,13 +38,45 @@ import java.util.Collection;
  */
 public interface ILexicalTokenTerm<E extends CharSequence, T extends ILexicalToken<E>> extends Serializable {
 
+    /**
+     * Adds new token to the current term
+     *
+     * @param token - token to be stored
+     */
     void addToken(final T token);
 
+    /**
+     * Removes token from the current term
+     *
+     * @param token - token to be removed
+     */
     void removeToken(final T token);
 
+    /**
+     * Sets a new collection of tokens to the current term
+     *
+     * @param tokenCollection - collection of tokens to be stored
+     */
     void setTokens(final Collection<? extends T> tokenCollection);
 
+    /**
+     * Sets the actual token length in the current term
+     *
+     * @param length - token length
+     */
     void setTokenLength(int length);
 
+    /**
+     * Returns number of tokens of the current term
+     *
+     * @return number of tokens of the current term
+     */
+    int size();
+
+    /**
+     * Returns formatted output representation of the current term
+     *
+     * @return - term as string
+     */
     String toFormatString();
 }

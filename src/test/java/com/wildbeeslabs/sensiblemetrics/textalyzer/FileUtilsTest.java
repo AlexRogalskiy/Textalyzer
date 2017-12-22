@@ -33,10 +33,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -90,7 +92,7 @@ public class FileUtilsTest {
         Assert.assertEquals("Checking the size of token list: ", 3, map.size());
 
         String outputFile = "src/main/e/OUTPUT.txt";
-        List<IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
+        List<IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(Stream.of(inputString), Comparator.reverseOrder());
         Assert.assertEquals("Checking the size of output token list: ", 3, list.size());
         FileUtils.writeFile(new File(outputFile), list);
 
@@ -106,11 +108,11 @@ public class FileUtilsTest {
     @Test
     public void testWriteFileSortedAsc() {
         String inputString = "asf;fsa sadfas; fsad asdffsda ";
-        Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getSortedTokenMapByKey(Stream.of(inputString));
+        Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getSortedTokenMapByKey(Stream.of(inputString), Comparator.reverseOrder());
         Assert.assertEquals("Checking the size of token list: ", 4, map.size());
 
         String outputFile = "src/main/resources/OUTPUT.txt";
-        List<IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
+        List<IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(Stream.of(inputString), Comparator.reverseOrder());
         Assert.assertEquals("Checking the size of output token list: ", 4, list.size());
         FileUtils.writeFile(new File(outputFile), list);
 

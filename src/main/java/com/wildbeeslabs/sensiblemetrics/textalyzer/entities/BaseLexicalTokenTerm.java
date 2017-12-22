@@ -84,6 +84,14 @@ public abstract class BaseLexicalTokenTerm<E extends CharSequence, T extends ILe
     }
 
     @Override
+    public int size() {
+        if (Objects.nonNull(this.tokenList)) {
+            return this.tokenList.size();
+        }
+        return 0;
+    }
+
+    @Override
     public String toFormatString() {
         return StringUtils.join(this.tokenList, ", ");
     }

@@ -42,8 +42,8 @@ import java.nio.file.Paths;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -101,8 +101,7 @@ public class FileUtils {
     public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> List<E> readFile(final File inputFile, final ILexicalTokenAnalyzer<U, T, E> analyzer) {
         Objects.requireNonNull(inputFile);
         final List<String> stringList = readAllLines(inputFile);
-        final Map<Integer, List<T>> wordsMap = analyzer.getSortedTokenMapByKey(stringList.stream().map(word -> (U) word));
-        return analyzer.getLexicalTokenTermList(wordsMap);
+        return analyzer.getLexicalTokenTermList(stringList.stream().map(word -> (U) word), Comparator.reverseOrder());
     }
 
     public static <U extends CharSequence, T extends ILexicalToken<U>, E extends ILexicalTokenTerm<U, T>> void writeFile(final File outputFile, final List<? extends E> output) {

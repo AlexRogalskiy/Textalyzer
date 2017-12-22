@@ -36,7 +36,17 @@ import java.util.Set;
  */
 public interface IVowelLexicalToken<T extends CharSequence> extends ILexicalToken<T> {
 
-    int getVowelCount();
+    /**
+     * Returns total number of vowels in token
+     *
+     * @return total number of vowels
+     */
+    int vowelCount();
 
-    Set<Character> getVowelCharacterSet();
+    /**
+     * Returns vowel character set in token
+     *
+     * @return vowel character set
+     */
+    Set<Character> vowelCharacterSet();
 }

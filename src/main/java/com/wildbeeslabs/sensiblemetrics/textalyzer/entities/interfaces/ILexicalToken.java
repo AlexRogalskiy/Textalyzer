@@ -38,10 +38,25 @@ import java.util.UUID;
  */
 public interface ILexicalToken<T extends CharSequence> extends Serializable {
 
-    Set<Integer> getCharacterSet();
+    /**
+     * Returns character set of the current token
+     *
+     * @return character set of the current token
+     */
+    Set<Integer> characterSet();
 
-    int getLength();
+    /**
+     * Returns length of the current token
+     *
+     * @return length of the current token
+     */
+    int length();
 
+    /**
+     * Returns UUID of the current token
+     *
+     * @return UUID of the current token
+     */
     UUID getId();
 
 }

@@ -78,7 +78,7 @@ public abstract class BaseLexicalToken<T extends CharSequence> implements ILexic
     }
 
     @Override
-    public int getLength() {
+    public int length() {
         if (Objects.isNull(this.value)) {
             return 0;
         }
@@ -86,7 +86,7 @@ public abstract class BaseLexicalToken<T extends CharSequence> implements ILexic
     }
 
     @Override
-    public Set<Integer> getCharacterSet() {
+    public Set<Integer> characterSet() {
         return Stream.of(this.value)
                 .flatMapToInt(CharSequence::chars)
                 .mapToObj(c -> Integer.valueOf(c))

@@ -44,13 +44,37 @@ import java.util.stream.Stream;
  */
 public interface ILexicalTokenAnalyzer<E extends CharSequence, T extends ILexicalToken<E>, U extends ILexicalTokenTerm<E, T>> {
 
+    /**
+     * Returns collection of tokens collected from stream
+     *
+     * @param stream - input text stream
+     * @return collection of tokens collected from stream
+     */
     List<T> getLexicalTokenList(final Stream<E> stream);
 
+    /**
+     * Returns tokens map grouped by length
+     *
+     * @param stream - input text stream
+     * @return tokens map grouped by length
+     */
     Map<Integer, List<T>> getTokenMapByLength(final Stream<E> stream);
 
+    /**
+     * Returns tokens map grouped by key in a sorted order
+     *
+     * @param stream - input text stream
+     * @param comparator - comparator instance for sort ordering
+     * @return tokens map grouped by key in a sorted order
+     */
     Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream, final Comparator<? super Integer> comparator);
 
-    Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream);
-
-    List<U> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap);
+    /**
+     * Returns collection of token terms from the current stream
+     *
+     * @param stream - input text stream
+     * @param comparator - comparator instance for sort ordering
+     * @return collection of token terms
+     */
+    List<U> getLexicalTokenTermList(final Stream<E> stream, final Comparator<? super Integer> comparator);
 }

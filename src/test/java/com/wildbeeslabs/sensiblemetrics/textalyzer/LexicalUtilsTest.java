@@ -28,6 +28,7 @@ import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.VowelLexicalTokenAna
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalTokenTerm;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -80,7 +81,7 @@ public class LexicalUtilsTest {
     @Test
     public void testGetSortedTokenMapByWordLength() {
         String inputString = "Base test simple string a new one";
-        Map<Integer, List<IVowelLexicalToken<String>>> list = this.analyzer.getSortedTokenMapByKey(Stream.of(inputString));
+        Map<Integer, List<IVowelLexicalToken<String>>> list = this.analyzer.getSortedTokenMapByKey(Stream.of(inputString), Comparator.reverseOrder());
         Assert.assertEquals(4, list.size());
     }
 
@@ -90,7 +91,7 @@ public class LexicalUtilsTest {
         Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getTokenMapByLength(Stream.of(inputString));
         Assert.assertEquals(3, map.size());
 
-        List<IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(map);
+        List<IVowelLexicalTokenTerm<String, IVowelLexicalToken<String>>> list = this.analyzer.getLexicalTokenTermList(Stream.of(inputString), Comparator.reverseOrder());
         Assert.assertEquals(3, list.size());
     }
 

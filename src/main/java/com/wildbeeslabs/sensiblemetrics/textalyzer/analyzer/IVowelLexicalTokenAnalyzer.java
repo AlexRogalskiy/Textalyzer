@@ -28,7 +28,6 @@ import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLex
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  *
@@ -43,7 +42,12 @@ import java.util.function.Function;
  */
 public interface IVowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelLexicalToken<E>, U extends IVowelLexicalTokenTerm<E, T>> extends ILexicalTokenAnalyzer<E, T, U> {
 
-    Map<T, Integer> getTokenVowelCountMapByVowelString(final List<T> tokenList);
+    /**
+     * Returns vowel counter map by token
+     *
+     * @param tokenList - collection of tokens
+     * @return vowel counter map by token
+     */
+    Map<T, Integer> getVowelCountMapByToken(final List<T> tokenList);
 
-    Function<CharSequence, CharSequence> getFilterFunction(final String filterPattern);
 }

@@ -58,7 +58,7 @@ public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexic
     }
 
     @Override
-    public double getVowelCounterPerToken() {
+    public double vowelCounterPerToken() {
         double result = 0.0;
         if (!this.getTokenList().isEmpty()) {
             result = (double) this.getVowelCounter() / this.getTokenList().size();
@@ -67,14 +67,16 @@ public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexic
     }
 
     private int getVowelCounter() {
-        return ConverterUtils.reduceStreamBy(this.tokenList.stream().map((token) -> { return token.getVowelCount(); }), 0, (i1, i2) -> i1 + i2);
+        return ConverterUtils.reduceStreamBy(this.tokenList.stream().map((token) -> {
+            return token.vowelCount();
+        }), 0, (i1, i2) -> i1 + i2);
     }
 
     @Override
     public Set<Character> getUniqueVowelSet() {
         final Set<Character> uniqueVowelSet = new HashSet<>();
         this.tokenList.stream().forEach((token) -> {
-            uniqueVowelSet.addAll(token.getVowelCharacterSet());
+            uniqueVowelSet.addAll(token.vowelCharacterSet());
         });
         return uniqueVowelSet;
     }
@@ -91,7 +93,7 @@ public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexic
             }
         }
         sBuffer.append("}").append(", ").append(this.getTokenLength()).append(")");
-        sBuffer.append(" -> ").append(NumberUtils.format(this.getVowelCounterPerToken()));
+        sBuffer.append(" -> ").append(NumberUtils.format(this.vowelCounterPerToken()));
         return sBuffer.toString();
     }
 }

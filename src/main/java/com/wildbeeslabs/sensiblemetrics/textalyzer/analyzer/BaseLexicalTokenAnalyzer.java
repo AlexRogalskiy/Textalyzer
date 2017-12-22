@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -111,7 +112,8 @@ public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends
     }
 
     @Override
-    public List<U> getLexicalTokenTermList(final Map<Integer, List<T>> tokenMap) {
+    public List<U> getLexicalTokenTermList(final Stream<E> stream, final Comparator<? super Integer> comparator) {
+        final Map<Integer, List<T>> tokenMap = this.getSortedTokenMapByKey(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER, comparator);
         final List<U> tokenTermList = new ArrayList<>(tokenMap.size());
         tokenMap.entrySet().stream().map((tokenEntry) -> {
             final U tokenTerm = this.createLexicalTokenTerm();
@@ -123,10 +125,12 @@ public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends
         });
         return tokenTermList;
     }
-    
+
     protected Logger getLogger() {
         return this.LOGGER;
     }
+
+    protected abstract Function<CharSequence, CharSequence> getDefaultFilterFunction();
 
     protected abstract U createLexicalTokenTerm();
 

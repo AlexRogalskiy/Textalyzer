@@ -37,7 +37,17 @@ import java.util.Set;
  */
 public interface IVowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexicalToken<E>> extends ILexicalTokenTerm<E, T> {
 
+    /**
+     * Returns unique vowel character set of the current term
+     *
+     * @return unique vowel character set
+     */
     Set<Character> getUniqueVowelSet();
 
-    double getVowelCounterPerToken();
+    /**
+     * Returns average number of vowels per tokens of the current term
+     *
+     * @return average number of vowels per token
+     */
+    double vowelCounterPerToken();
 }
