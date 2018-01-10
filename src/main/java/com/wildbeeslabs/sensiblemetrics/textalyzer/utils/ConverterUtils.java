@@ -37,6 +37,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -78,6 +79,22 @@ public class ConverterUtils {
 
     public static <T, K> Map<K, Optional<T>> getMapMaxBy(final Stream<T> stream, final Function<T, K> groupingBy, final Comparator<? super T> cmp) {
         return stream.collect(Collectors.groupingBy(groupingBy, Collectors.maxBy(cmp)));
+    }
+
+    public static <T, K> Map<K, Optional<T>> getMapMinBy(final Stream<T> stream, final Function<T, K> groupingBy, final Comparator<? super T> cmp) {
+        return stream.collect(Collectors.groupingBy(groupingBy, Collectors.minBy(cmp)));
+    }
+
+    public static <T> Optional<T> getMaxBy(final Stream<T> stream, final Comparator<? super T> cmp) {
+        return getMinMaxBy(stream, Collectors.maxBy(cmp));
+    }
+
+    public static <T> Optional<T> getMinBy(final Stream<T> stream, final Comparator<? super T> cmp) {
+        return getMinMaxBy(stream, Collectors.minBy(cmp));
+    }
+
+    protected static <T> Optional<T> getMinMaxBy(final Stream<T> stream, final Collector<T, ?, Optional<T>> collector) {
+        return stream.collect(collector);
     }
 
     public static <E> Map<Integer, Long> getMapCountBy(final Stream<E> stream, final Function<E, Integer> groupingBy) {
@@ -145,9 +162,6 @@ public class ConverterUtils {
     }
 
     public static List<String> split(final String value, final String delimiter, final Predicate<? super String> predicate) {
-        return Arrays.stream(String.valueOf(value).split(delimiter))
-                .map(String::trim)
-                .filter(predicate)
-                .collect(Collectors.toList());
+        return Arrays.stream(String.valueOf(value).split(delimiter)).map(String::trim).filter(predicate).collect(Collectors.toList());
     }
 }

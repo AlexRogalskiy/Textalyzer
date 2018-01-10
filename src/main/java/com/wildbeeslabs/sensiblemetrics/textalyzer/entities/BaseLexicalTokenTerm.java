@@ -41,8 +41,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import lombok.ToString;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Base abstract lexical token term class to store information on lexical tokens
  *
@@ -107,7 +105,8 @@ public abstract class BaseLexicalTokenTerm<E extends CharSequence, T extends ILe
 
     @Override
     public String toFormatString() {
-        return StringUtils.join(this.tokenList, ", ");
+        return this.tokenList.stream().map((token) -> token.toString()).collect(Collectors.joining(", ", "-Start-", "-End-"));
+//        return StringUtils.join(this.tokenList, ", ");
     }
 
     protected int count(final Function<T, Integer> mapper) {
