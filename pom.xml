@@ -169,6 +169,7 @@
     </build>
 
     <dependencies>
+        <!-- Command-line arguments reader -->
         <dependency>
             <groupId>args4j</groupId>
             <artifactId>args4j</artifactId>
@@ -190,7 +191,7 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- Design dependencies -->
+        <!-- Design stub dependencies -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

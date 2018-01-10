@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.textalyzer;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.NumberUtils;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -49,6 +50,7 @@ public class NumberUtilsTest {
 
     @Before
     public void setUp() {
+        LOGGER.info("Initializing number utils loader...");
     }
 
     @Test

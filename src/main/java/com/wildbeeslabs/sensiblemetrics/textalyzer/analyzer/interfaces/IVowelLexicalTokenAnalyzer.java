@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer;
+package com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.interfaces;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalTokenTerm;
@@ -48,6 +48,6 @@ public interface IVowelLexicalTokenAnalyzer<E extends CharSequence, T extends IV
      * @param tokenList - collection of tokens
      * @return vowel counter map by token
      */
-    Map<T, Integer> getVowelCountMapByToken(final List<T> tokenList);
+    Map<T, Integer> getVowelCountMapByLexicalToken(final List<T> tokenList);
 
 }

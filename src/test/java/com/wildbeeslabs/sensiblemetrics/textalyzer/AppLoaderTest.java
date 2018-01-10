@@ -25,13 +25,14 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  *
- * Unit test case for Apploader class
+ * Unit test case for AppLoader class
  *
  * @author Alex
  * @version 1.0.0
@@ -46,6 +47,7 @@ public class AppLoaderTest {
 
     @Before
     public void setUp() {
+        LOGGER.info("Initializing application loader...");
     }
 
     @Test

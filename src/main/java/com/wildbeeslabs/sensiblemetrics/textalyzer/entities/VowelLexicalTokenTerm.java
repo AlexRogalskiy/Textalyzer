@@ -59,17 +59,18 @@ public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexic
 
     @Override
     public double vowelCounterPerToken() {
-        double result = 0.0;
-        if (!this.getTokenList().isEmpty()) {
-            result = (double) this.getVowelCounter() / this.getTokenList().size();
-        }
-        return result;
+//        double result = 0.0;
+//        if (!this.getTokenList().isEmpty()) {
+//            result = (double) this.getVowelCounter() / this.getTokenList().size();
+//        }
+//        return result;
+        return this.getTokenList().stream().mapToInt((token) -> token.vowelCount()).average().getAsDouble();
     }
 
     private int getVowelCounter() {
         return ConverterUtils.reduceStreamBy(this.tokenList.stream().map((token) -> {
             return token.vowelCount();
-        }), 0, (i1, i2) -> i1 + i2);
+        }), 0, (i1, i2) -> (i1 + i2));
     }
 
     @Override

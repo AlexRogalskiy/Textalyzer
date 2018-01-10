@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer;
 
+import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.interfaces.IVowelLexicalTokenAnalyzer;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.VowelLexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.VowelLexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
@@ -72,12 +73,12 @@ public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelL
     }
 
     @Override
-    public Map<Integer, List<T>> getTokenMapByLength(final Stream<E> stream) {
-        return this.getTokenMapByLength(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER);
+    public Map<Integer, List<T>> getLexicalTokenMapByLength(final Stream<E> stream) {
+        return this.getLexicalTokenMapByLength(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER);
     }
 
     @Override
-    public Map<T, Integer> getVowelCountMapByToken(final List<T> tokenList) {
+    public Map<T, Integer> getVowelCountMapByLexicalToken(final List<T> tokenList) {
         return ConverterUtils.getMapSumBy(tokenList.stream(), token -> token, token -> token.vowelCount());
     }
 
@@ -90,8 +91,8 @@ public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelL
     }
 
     @Override
-    public Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream, final Comparator<? super Integer> comparator) {
-        return this.getSortedTokenMapByKey(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER, comparator);
+    public Map<Integer, List<T>> getSortedLexicalTokenMapByKey(final Stream<E> stream, final Comparator<? super Integer> comparator) {
+        return this.getSortedLexicalTokenMapByKey(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER, comparator);
     }
 
     @Override

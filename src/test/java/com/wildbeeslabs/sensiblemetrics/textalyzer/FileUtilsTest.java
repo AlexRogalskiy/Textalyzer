@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.textalyzer;
 
-import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.IVowelLexicalTokenAnalyzer;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.interfaces.IVowelLexicalTokenAnalyzer;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.VowelLexicalTokenAnalyzer;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalTokenTerm;
@@ -88,7 +88,7 @@ public class FileUtilsTest {
     @Test
     public void testWriteFileSortedDesc() {
         String inputString = "asffsa sadfas fsad asdffsda ";
-        Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getTokenMapByLength(Stream.of(inputString));
+        Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getLexicalTokenMapByLength(Stream.of(inputString));
         Assert.assertEquals("Checking the size of token list: ", 3, map.size());
 
         String outputFile = "src/main/e/OUTPUT.txt";
@@ -108,7 +108,7 @@ public class FileUtilsTest {
     @Test
     public void testWriteFileSortedAsc() {
         String inputString = "asf;fsa sadfas; fsad asdffsda ";
-        Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getSortedTokenMapByKey(Stream.of(inputString), Comparator.reverseOrder());
+        Map<Integer, List<IVowelLexicalToken<String>>> map = this.analyzer.getSortedLexicalTokenMapByKey(Stream.of(inputString), Comparator.reverseOrder());
         Assert.assertEquals("Checking the size of token list: ", 4, map.size());
 
         String outputFile = "src/main/resources/OUTPUT.txt";

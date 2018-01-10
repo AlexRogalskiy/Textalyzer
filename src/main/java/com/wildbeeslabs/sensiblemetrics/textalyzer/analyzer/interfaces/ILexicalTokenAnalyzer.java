@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer;
+package com.wildbeeslabs.sensiblemetrics.textalyzer.analyzer.interfaces;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
@@ -58,7 +58,7 @@ public interface ILexicalTokenAnalyzer<E extends CharSequence, T extends ILexica
      * @param stream - input text stream
      * @return tokens map grouped by length
      */
-    Map<Integer, List<T>> getTokenMapByLength(final Stream<E> stream);
+    Map<Integer, List<T>> getLexicalTokenMapByLength(final Stream<E> stream);
 
     /**
      * Returns tokens map grouped by key in a sorted order
@@ -67,7 +67,7 @@ public interface ILexicalTokenAnalyzer<E extends CharSequence, T extends ILexica
      * @param comparator - comparator instance for sort ordering
      * @return tokens map grouped by key in a sorted order
      */
-    Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream, final Comparator<? super Integer> comparator);
+    Map<Integer, List<T>> getSortedLexicalTokenMapByKey(final Stream<E> stream, final Comparator<? super Integer> comparator);
 
     /**
      * Returns collection of token terms from the current stream
