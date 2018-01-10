@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.IntSummaryStatistics;
 
 /**
  *
@@ -60,13 +61,6 @@ public interface ILexicalTokenTerm<E extends CharSequence, T extends ILexicalTok
     void setTokens(final Collection<? extends T> tokenCollection);
 
     /**
-     * Sets the actual token length in the current term
-     *
-     * @param length - token length
-     */
-    void setTokenLength(int length);
-
-    /**
      * Returns number of tokens of the current term
      *
      * @return number of tokens of the current term
@@ -79,4 +73,19 @@ public interface ILexicalTokenTerm<E extends CharSequence, T extends ILexicalTok
      * @return - term as string
      */
     String toFormatString();
+
+    /**
+     * Returns formatted output statistics of the current term (default by
+     * length)
+     *
+     * @return - term statistics
+     */
+    IntSummaryStatistics getStatistics();
+
+    /**
+     * Returns average token length of the current term
+     *
+     * @return - average token length
+     */
+    double getAvgTokenLength();
 }

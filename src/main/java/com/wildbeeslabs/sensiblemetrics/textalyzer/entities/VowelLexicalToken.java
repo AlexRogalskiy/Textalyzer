@@ -90,6 +90,6 @@ public class VowelLexicalToken<T extends CharSequence> extends BaseLexicalToken<
     }
 
     private String toVowelString() {
-        return String.valueOf(this.value).replaceAll(DEFAULT_TOKEN_VOWELS_PATTERN, StringUtils.EMPTY);
+        return String.valueOf(this.value).replaceAll(VowelLexicalToken.DEFAULT_TOKEN_VOWELS_PATTERN, StringUtils.EMPTY);
     }
 }

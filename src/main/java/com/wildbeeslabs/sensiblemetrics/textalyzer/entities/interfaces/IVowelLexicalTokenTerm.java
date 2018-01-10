@@ -43,11 +43,4 @@ public interface IVowelLexicalTokenTerm<E extends CharSequence, T extends IVowel
      * @return unique vowel character set
      */
     Set<Character> getUniqueVowelSet();
-
-    /**
-     * Returns average number of vowels per tokens of the current term
-     *
-     * @return average number of vowels per token
-     */
-    double vowelCounterPerToken();
 }

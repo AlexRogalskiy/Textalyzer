@@ -30,11 +30,10 @@ import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLex
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalTokenTerm;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.ConverterUtils;
 
-import java.util.Comparator;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -68,36 +67,21 @@ public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelL
     }
 
     @Override
-    public List<T> getLexicalTokenList(final Stream<E> stream) {
-        return this.getLexicalTokenList(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER);
-    }
-
-    @Override
-    public Map<Integer, List<T>> getLexicalTokenMapByLength(final Stream<E> stream) {
-        return this.getLexicalTokenMapByLength(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER);
-    }
-
-    @Override
     public Map<T, Integer> getVowelCountMapByLexicalToken(final List<T> tokenList) {
-        return ConverterUtils.getMapSumBy(tokenList.stream(), token -> token, token -> token.vowelCount());
+        return ConverterUtils.getMapSumBy(tokenList.stream(), (token) -> token, token -> token.vowelCount());
     }
 
-    protected Map<String, Integer> getTokenVowelCountMap(final List<T> tokenList) {
-        return ConverterUtils.getMapSumBy(tokenList.stream(), token -> token.getId().toString(), token -> token.vowelCount());
+    protected Map<String, Integer> getLexicalTokenVowelCountMap(final List<T> tokenList) {
+        return ConverterUtils.getMapSumBy(tokenList.stream(), (token) -> token.getId().toString(), token -> token.vowelCount());
     }
 
-    public Map<Integer, List<T>> getSortedTokenMapByKey(final Stream<E> stream) {
-        return this.getReversedSortedTokenMapByKey(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER);
-    }
-
-    @Override
-    public Map<Integer, List<T>> getSortedLexicalTokenMapByKey(final Stream<E> stream, final Comparator<? super Integer> comparator) {
-        return this.getSortedLexicalTokenMapByKey(stream, this.getDefaultFilterFunction(), BaseLexicalTokenAnalyzer.DEFAULT_TOKEN_DELIMITER, comparator);
+    public Map<Integer, IntSummaryStatistics> getVowelLexicalTokenStatisticsByLength(final List<T> tokenList) {
+        return this.getLexicalTokenStatistics(tokenList.stream(), (token) -> token.length(), mapper -> mapper.vowelCount());
     }
 
     @Override
-    protected Function<CharSequence, CharSequence> getDefaultFilterFunction() {
-        return (word -> String.valueOf(word).replaceAll(VowelLexicalTokenAnalyzer.DEFAULT_TOKEN_FILTER_PATTERN, StringUtils.EMPTY).toLowerCase().trim());
+    protected Function<CharSequence, CharSequence> getDefaultFilter() {
+        return ((word) -> String.valueOf(word).replaceAll(VowelLexicalTokenAnalyzer.DEFAULT_TOKEN_FILTER_PATTERN, StringUtils.EMPTY).toLowerCase().trim());
     }
 
     @Override

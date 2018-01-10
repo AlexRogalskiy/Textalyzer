@@ -25,11 +25,15 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer.entities;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalTokenTerm;
+import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.ConverterUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -92,7 +96,21 @@ public abstract class BaseLexicalTokenTerm<E extends CharSequence, T extends ILe
     }
 
     @Override
+    public IntSummaryStatistics getStatistics() {
+        return this.getTokenList().stream().collect(Collectors.summarizingInt((token) -> token.length()));
+    }
+
+    @Override
+    public double getAvgTokenLength() {
+        return this.getTokenList().stream().mapToInt((token) -> token.length()).average().getAsDouble();
+    }
+
+    @Override
     public String toFormatString() {
         return StringUtils.join(this.tokenList, ", ");
+    }
+
+    protected int count(final Function<T, Integer> mapper) {
+        return ConverterUtils.reduceStreamBy(this.getTokenList().stream().map(mapper), 0, (i1, i2) -> (i1 + i2));
     }
 }

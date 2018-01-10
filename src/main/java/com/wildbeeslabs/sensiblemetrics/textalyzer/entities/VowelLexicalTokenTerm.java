@@ -25,12 +25,13 @@ package com.wildbeeslabs.sensiblemetrics.textalyzer.entities;
 
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalToken;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.IVowelLexicalTokenTerm;
-import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.ConverterUtils;
 import com.wildbeeslabs.sensiblemetrics.textalyzer.utils.NumberUtils;
 
 import java.util.HashSet;
+import java.util.IntSummaryStatistics;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -51,32 +52,27 @@ import lombok.ToString;
 @ToString
 public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexicalToken<E>> extends BaseLexicalTokenTerm<E, T> implements IVowelLexicalTokenTerm<E, T> {
 
-    private int tokenLength;
-
     public VowelLexicalTokenTerm() {
         super();
     }
 
-    @Override
-    public double vowelCounterPerToken() {
-//        double result = 0.0;
-//        if (!this.getTokenList().isEmpty()) {
-//            result = (double) this.getVowelCounter() / this.getTokenList().size();
-//        }
-//        return result;
+    public double getAvgVowelCounterPerToken() {
         return this.getTokenList().stream().mapToInt((token) -> token.vowelCount()).average().getAsDouble();
     }
 
-    private int getVowelCounter() {
-        return ConverterUtils.reduceStreamBy(this.tokenList.stream().map((token) -> {
-            return token.vowelCount();
-        }), 0, (i1, i2) -> (i1 + i2));
+    @Override
+    public IntSummaryStatistics getStatistics() {
+        return this.getTokenList().stream().collect(Collectors.summarizingInt((token) -> token.vowelCount()));
+    }
+
+    public int count() {
+        return this.count((token) -> token.vowelCount());
     }
 
     @Override
     public Set<Character> getUniqueVowelSet() {
         final Set<Character> uniqueVowelSet = new HashSet<>();
-        this.tokenList.stream().forEach((token) -> {
+        this.getTokenList().stream().forEach((token) -> {
             uniqueVowelSet.addAll(token.vowelCharacterSet());
         });
         return uniqueVowelSet;
@@ -93,8 +89,8 @@ public class VowelLexicalTokenTerm<E extends CharSequence, T extends IVowelLexic
                 sBuffer.append(", ");
             }
         }
-        sBuffer.append("}").append(", ").append(this.getTokenLength()).append(")");
-        sBuffer.append(" -> ").append(NumberUtils.format(this.vowelCounterPerToken()));
+        sBuffer.append("}").append(", ").append(Double.valueOf(this.getAvgTokenLength()).intValue()).append(")");
+        sBuffer.append(" -> ").append(NumberUtils.format(this.getAvgVowelCounterPerToken()));
         return sBuffer.toString();
     }
 }

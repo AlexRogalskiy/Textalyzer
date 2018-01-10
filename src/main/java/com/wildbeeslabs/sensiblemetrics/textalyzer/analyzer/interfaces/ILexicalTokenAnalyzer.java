@@ -29,6 +29,7 @@ import com.wildbeeslabs.sensiblemetrics.textalyzer.entities.interfaces.ILexicalT
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -59,6 +60,30 @@ public interface ILexicalTokenAnalyzer<E extends CharSequence, T extends ILexica
      * @return tokens map grouped by length
      */
     Map<Integer, List<T>> getLexicalTokenMapByLength(final Stream<E> stream);
+
+    /**
+     * Returns tokens unique map grouped by length
+     *
+     * @param stream - input text stream
+     * @return tokens unique map grouped by length
+     */
+    Map<Integer, Set<T>> getUniqueLexicalTokenMapByLength(final Stream<E> stream);
+
+    /**
+     * Returns tokens count map grouped by length
+     *
+     * @param stream - input text stream
+     * @return tokens count map grouped by length
+     */
+    Map<Integer, Long> getCountMapByLength(final Stream<E> stream);
+
+    /**
+     * Returns tokens map grouped by token ID
+     *
+     * @param stream - input token stream
+     * @return tokens map grouped by token ID
+     */
+    Map<String, T> getLexicalTokenMapById(final Stream<T> stream);
 
     /**
      * Returns tokens map grouped by key in a sorted order
