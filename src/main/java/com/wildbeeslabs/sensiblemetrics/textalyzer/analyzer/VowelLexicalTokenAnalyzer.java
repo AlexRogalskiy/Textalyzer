@@ -68,7 +68,7 @@ public class VowelLexicalTokenAnalyzer<E extends CharSequence, T extends IVowelL
 
     @Override
     public Map<T, Integer> getVowelCountMapByLexicalToken(final List<T> tokenList) {
-        return ConverterUtils.getMapSumBy(tokenList.stream(), (token) -> token, token -> token.vowelCount());
+        return ConverterUtils.getMapSumBy(tokenList.stream(), Function.identity(), token -> token.vowelCount());
     }
 
     protected Map<String, Integer> getLexicalTokenVowelCountMap(final List<T> tokenList) {

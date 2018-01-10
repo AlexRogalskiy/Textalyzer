@@ -127,7 +127,7 @@ public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends
 
     @Override
     public Map<String, T> getLexicalTokenMapById(final Stream<T> stream) {
-        return ConverterUtils.convertToMap(stream, (token) -> token.getId().toString(), (token) -> token);
+        return ConverterUtils.convertToMap(stream, (token) -> token.getId().toString(), Function.identity());
     }
 
     @Override
