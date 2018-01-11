@@ -105,7 +105,8 @@ public abstract class BaseLexicalTokenTerm<E extends CharSequence, T extends ILe
 
     @Override
     public String toFormatString() {
-        return this.tokenList.stream().map((token) -> token.toString()).collect(Collectors.joining(", ", "-Start-", "-End-"));
+        return ConverterUtils.joinWithPrefixPostfix(this.getTokenList(), ", ", " [ ", " ] ");
+//        return this.tokenList.stream().map((token) -> token.toString()).collect(Collectors.joining(", ", "-Start-", "-End-"));
 //        return StringUtils.join(this.tokenList, ", ");
     }
 
