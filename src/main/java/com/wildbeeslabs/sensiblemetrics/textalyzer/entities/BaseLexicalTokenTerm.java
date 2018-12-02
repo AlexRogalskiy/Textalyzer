@@ -52,7 +52,7 @@ import lombok.ToString;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode
 @ToString
 public abstract class BaseLexicalTokenTerm<E extends CharSequence, T extends ILexicalToken<E>> implements ILexicalTokenTerm<E, T> {
 

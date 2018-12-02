@@ -48,7 +48,7 @@ import lombok.ToString;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false, exclude = "id")
+@EqualsAndHashCode(exclude = "id")
 @ToString
 public abstract class BaseLexicalToken<T extends CharSequence> implements ILexicalToken<T> {
 

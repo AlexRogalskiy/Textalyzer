@@ -57,7 +57,7 @@ import org.apache.log4j.Logger;
  * @param <U>
  *
  */
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode
 @ToString
 public abstract class BaseLexicalTokenAnalyzer<E extends CharSequence, T extends ILexicalToken<E>, U extends ILexicalTokenTerm<E, T>> implements ILexicalTokenAnalyzer<E, T, U> {
 
